@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 - [Obtaining data from social science repositories](#obtaining-data-from-social-science-repositories).
-- [Open up and explore RStudio](#open-up-and-explore-rstudio).
+- [Getting a sense of your data](#getting-a-sense-of-your-data).
 - [Getting organised: R Projects](#getting-organised-r-projects).
 - [Talk to your computer](#talk-to-your-computer).
 - [More on packages](#more-on-packages).
@@ -31,11 +31,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Obtaining data from social science repositories
 
-Last week we saw how to use data frames that are distributed as part of R packages. More often than not, you will be getting your data from other sources. A common place to obtain data from in the social sciences are such as the [UK Data Service](https://www.ukdataservice.ac.uk) or the US-based [National Archive for Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/content/NACJD/index.html). These are collections of datasets typically obtained with public funding, and that either researchers or government agencies have placed together in these curated collections. Here you can, for example, obtain the data from the Crime Survey for England and Wales. We will be using datasets from these sources in this course, so it is important that you learn how to use these repositories.
+Last week we saw how to use data frames that are distributed as part of R packages. More often than not, you will be getting your data from other sources. A common place to obtain data from in the social sciences are **data repositories** such as the [UK Data Service](https://www.ukdataservice.ac.uk) or the US-based [National Archive for Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/content/NACJD/index.html). These are collections of datasets typically obtained with public funding, and that either researchers or government agencies have placed together in these curated collections. Here you can, for example, obtain the data from the *Crime Survey for England and Wales*. We will be using datasets from these sources in this course, so it is important that you learn how to use these repositories.
 
-In this session, you will learn how to obtain data from the Crime Survey for England and Wales and then you will read the data into R. As you will discover R is capable of reading files in a wide variety of formats. But first you will need to register with the UK Data Service so that you can use data stored there. You can find out how to do this in their website. Read carefully the section how to access in their [*Get Data*](https://www.ukdataservice.ac.uk/get-data/how-to-access) section:
+In this session, you will learn how to obtain data from the *Crime Survey for England and Wales* and then you will read the data into R. As you will discover R is capable of reading files in a wide variety of formats. But first you will need to register with the UK Data Service so that you can use data stored there. You can find out how to do this in their website. Read carefully the section how to access in their [*Get Data*](https://www.ukdataservice.ac.uk/get-data/how-to-access) section:
 
-![How to access](second_session_imgs/registration.png)
+![How to access](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/registration.png)
 
 Follow the steps described in their webpage to register as a user. Once you have registered there are several steps you will need to follow:
 
@@ -45,21 +45,23 @@ Follow the steps described in their webpage to register as a user. Once you have
 
 These steps are described [here](https://www.ukdataservice.ac.uk/get-data/how-to-access/downloadorder). There is also a video that explains the required steps in that webpage. In the discovery section of their webpage I want you to locate the unrestricted teaching version of the Crime Survey for England and Wales (SN8011), as shown in the image below.
 
-![Discovery and CSEW](second_session_imgs/CSEW.png)
+![Discovery and CSEW](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/CSEW.png)
 
-Follow the link to this dataset. This dataset is fully open access, so in this case you don't have to go through so many intermediate steps in order to use it. You can download the dataset directly from the link provided. Before you do that, have read the information about this dataset that is provided [in the webpage](https://discover.ukdataservice.ac.uk/catalogue?sn=8011#administrative):
+Follow the link to this dataset. This dataset is fully open access, so in this particular case you don't have to go through so many intermediate steps in order to use it. You can download the dataset directly from the link provided. Before you do that, have read the information about this dataset that is provided [in the webpage](https://discover.ukdataservice.ac.uk/catalogue?sn=8011#administrative):
 
-![The CSEW Unrestricted Teaching Data](second_session_imgs/CSEW2.png)
+![The CSEW Unrestricted Teaching Data](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/CSEW2.png)
 
 You will see that you can download the data in three different formats. Two of them are proprietary (SPSS and STATA) -so that you can use them with those expensive (and definetly not better than R) pieces of software. The third one is just tab delimited. Since SPSS is still fairly commonly used in British universities, we will teach you how to read that format into R. So download the SPSS version of it.
 
-Before you can read the files into R you need to unzip them. The files you have downloaded have been compressed into a zip file. You could use a standard zip app to do the job or you could use the command line in R to do that. We are going to use the *unzip* function for that. To find out what this function can do we will use another handy function: the *help* function.
+Before you can read the files into R you need to unzip them. The files you have downloaded have been compressed into a [zip](https://en.wikipedia.org/wiki/Zip_(file_format)) file. You could use a standard zip app to do the job or you could use the command line in R to do that. We are going to use the *unzip* function for that. To find out what this function can do we will use another handy function: the *help* function.
 
 ```{r}
 help(unzip)
 ```
 
-So, this function is equivalent to typing something in the search button of the Help window in the right bottom corner of of RStudio. But a bit quicker. You don't have to stop typing to use the mouse. Have a look a the arguments and defaults for this function. Ok, now we are going to use it to fully unzip everything that came with the zipped file.
+As you can see running this function is equivalent to typing something in the search button of the Help window in the right bottom corner of of RStudio. But a bit quicker. You don't have to stop typing to use the mouse. Have a look a the arguments and defaults for this function. 
+
+Ok, now we are going to use it to fully unzip everything that came with the zipped file. Note that R requires forward slashes (/) not back slashes (\) when specifying a file location. 
 
 ```{r}
 #First, I create an object with the filepath. This is good practice when you work with
@@ -71,20 +73,93 @@ zip_f <- "P:/LAWS20452/8011spss_92d3935a962138b37dc84c5e11c8365b.zip"
 unzip(zip_f)
 ```
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+If you navigate now to the Files window in the bottom right corner of RStudio you should see how a new subdirectory has been created. The name of this subdirectory is UKDA-8011-spss. Click on it. You will see two files a htm readme file and an rtf file with some information about what you just downloaded. Click on the rtf file. You will see a brief description of the included files and what they are. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+You will see that apart from the two files mentioned above there are two additional subdirectories: *mrdoc* and *spss*. The zip folders that are provided by the UK Data Service tend to have this structure. The first one contains the documentation for the datasets and the second (which would have a different name if you download your data in a format other than SPSS) has the actual data files. Click in the first one. Then  go to the pdf subdirectory. You will see the user guide for this dataset. This is a brief codebook that explains what you will find here. Essentially the data you have downloaded is a small subset of variables and cases from the CSEW that has been packed together for teaching purposes. The standard CSEW has hundreds of additional variables, many more cases, and considerably lenghtier user guides. If you navigate now to the spss subdirectory and go down all the possible levels you will eventually encounter a .sav file with the data on it. The .sav ending is the standard abbreviation used to identify data files in SPSS format.
 
-```{r cars}
-summary(cars)
+We are now ready to read this data into R. There are various packages that allow you to do that. We are going to use one of the most modern ones designed to read this kind of files, the *haven* package. If you don't have this package installed in your machine, you will need to install it before you can use it. Do so, if you need to. And once you are ready load this package:
+
+```{r}
+library(haven)
 ```
 
-## Including Plots
+We are going to use the *read_spss()* function. Use the *help()* function to find out what this function does and to understand the available arguments.
 
-You can also embed plots, for example:
+Ready? Let's load it now.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r, eval=FALSE}
+#First, we create an object to identify the pathfile. You will need to change this to whatever is #appropriate in your case.
+csew_loc <-("C:/Users/Juanjo Medina/Dropbox/1_Teaching/1 Manchester courses/20452 Modelling Criminological Data/R4Crim/UKDA-8011-spss/spss/spss19/csew1314teachingopen.sav")
+#Next we will use the function to read the data. But we don't simply want to read the data, we #want to store it in our environment. To do that we will create an object, we can call it csew, #and inside we will put whatever comes out from reading the .sav file using the read_spss #function.
+csew <- read_spss(csew_loc)
+  
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+If you look at your environment you should now be able to see a new object. It says you have 8843 observations and 32 variables.
+
+##Getting a sense of your data
+
+What is the first thing you need to ask yourself when you look at a dataset. Data are often too big to look at the whole thing. It is almost always impossible to eyeball the entire dataset and see what you have in terms of interesting patterns or potential problems. It is often a case of information overload and we want to be able to extract what is relevant and important about it. But where do you start?  [Here](http://rex-analytics.com/data-analysis-questions-to-ask-the-first-time/) you can find a brief but very useful overview put together by Steph de Silva. Read it before we carry on.
+
+![First questions to your data](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/firstlookatdata.jpg)
+
+As Mara Averick (somebody you want to follow at twitter if you want to be in top of R related resources) suggests:
+
+![Dating tips?](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/relationships.png)
+
+Many of these questions are things you should be able to answer after looking at the documentation that you downloaded. The datasets that you will find in social science repositories often come with very detailed documentation. It is critical you read this documentation if you don't want to make mistakes later on, often from making unwarranted assumptions. I'm talking from experience! But in real life a good deal of data won't come neatly packaged and documented as we see here. Here we are going to introduce a few functions that will help you to start making sense for what you have just downloaded.
+
+Summarising the data is the first step in any analysis and it is also used for finding out potential problems with the data. Regarding the latter you want to look out for: missing values; values outside the expected range (e.g., someone aged 200 years); values that seem to be in the wrong units; mislabelled variables; or variables that seem to be the wrong class (e.g., a quantitative variable encoded as a factor). Lets start by the basic things you always look first in a datasets. 
+
+You can see in the Environment window that csew has 8843 observations (rows) of 32 variables (columns). You can also obtain this information using code. Here you want the  **DIM**ensions of the dataframe (the number of rows and columns) so you use the `dim()` function:
+
+```{r}
+dim(csew)
+
+```
+
+We can see that the dataset has 8843 observations or rows and 32 columns or variables. Looking at this information will help you to diagnose whether there was any trouble getting your data into R (e.g., imagine you know there should be more cases or more variable). You may also want to have a look at the names of the columns using the `names()` function. We will see the names of the variables.
+
+```{r}
+names(csew)
+```
+
+As you may notice, these names are hard to interpret. You need to look at the codebook that you unzipped earlier to figure out what each of those variables is actually measuring. The bad news is that real life datasets in social science are much larger than this and have many more variables (hundreds or more). The good news is that typically you will only need a small handful of them and will only require to deeply familiarise yourself with that smaller subset.
+
+You also want to undersatand what the csew object actually is. You can do that using the *class()* function:
+
+```{r}
+class(csew)
+```
+
+What does tbl stands for? It refers to **tibbles**. This is essentially a new type of data structure introduced into R. Tibbles are data frames. That's what the class() function also says, but they introduce some tweaks to make life easier. The R language has been around for a while and sometimes things that made sense a couple of decadea ago, make less sense now. A number of programmers are trying to create code that is more modern and more useful today. They are doing this by introducing a set of packages that speak to each other in order to modernise R without breaking existing code. This set of packages is called the **tidyverse**.  Tibbles are dataframes that have been optimised within this new set of packages. You can read a bit more about tibbles [here](http://r4ds.had.co.nz/tibbles.html).
+
+You can also look at the class of each individual column. As discussed, class of the variable lets us know if its an integer (number) or factor. 
+
+To get the class of one variable, you pass it to the `class()` function. For example
+
+```{r}
+class(csew$sex)
+
+class(csew$antisocx)
+```
+
+We talked about numeric vectors in week one. It is simply a collection of numbers. But what is a labelled vector? This is a new type of vector introduced by the *haven* package. Labelled vectors are categorical variables that have labels. 
+
+```{r}
+csew$sex
+summary(csew$sex)
+```
+
+
+There is a way that you can apply a function to all elements of a vector (list or dataframe). You can use the functions `sapply()`, `lapply()`, and `mapply()`  . To find out more about when to use each one see [here](https://www.r-bloggers.com/using-apply-sapply-lapply-in-r/). 
+
+For example, we can use the `lapply()` function to look at each column and get its class. To do so, we have to pass two arguments to the `lapply()` function, the first is the name of the dataframe, to tell it what to look through, and the second is the function we want it to apply to every column of that function. 
+
+So we want to type "lapply(" + "name of dataframe" + "," + "name of function " + ")" 
+
+Which is: 
+
+```{r}
+lapply(BCS0708, class)
+```
