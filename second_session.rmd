@@ -1,0 +1,90 @@
+---
+title: "Second_session"
+author: "Juanjo Medina (supplementing material produced as well by Reka Solimoyi)"
+date: "22 January 2018"
+output: 
+  html_document: 
+  toc: TRUE
+  toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- [Obtaining data from social science repositories](#obtaining-data-from-social-science-repositories).
+- [Open up and explore RStudio](#open-up-and-explore-rstudio).
+- [Getting organised: R Projects](#getting-organised-r-projects).
+- [Talk to your computer](#talk-to-your-computer).
+- [More on packages](#more-on-packages).
+- [Using objects and functions](#using-objects-and-functions).
+- [More on objects](#more-on-objects).
+- [Vectors](#vectors).
+- [On comments](#on-comments).
+- [Factors](#factors).
+- [Naming conventions for objects in R](#naming-conventions-for-objects-in-r).
+- [Dataframes](#dataframes).
+- [Exploring data](#exploring-data).
+- [Quitting RStudio](#quitting-rstudio).
+- [Homework](#homework).
+
+
+## Obtaining data from social science repositories
+
+Last week we saw how to use data frames that are distributed as part of R packages. More often than not, you will be getting your data from other sources. A common place to obtain data from in the social sciences are such as the [UK Data Service](https://www.ukdataservice.ac.uk) or the US-based [National Archive for Criminal Justice Data](https://www.icpsr.umich.edu/icpsrweb/content/NACJD/index.html). These are collections of datasets typically obtained with public funding, and that either researchers or government agencies have placed together in these curated collections. Here you can, for example, obtain the data from the Crime Survey for England and Wales. We will be using datasets from these sources in this course, so it is important that you learn how to use these repositories.
+
+In this session, you will learn how to obtain data from the Crime Survey for England and Wales and then you will read the data into R. As you will discover R is capable of reading files in a wide variety of formats. But first you will need to register with the UK Data Service so that you can use data stored there. You can find out how to do this in their website. Read carefully the section how to access in their [*Get Data*](https://www.ukdataservice.ac.uk/get-data/how-to-access) section:
+
+![How to access](second_session_imgs/registration.png)
+
+Follow the steps described in their webpage to register as a user. Once you have registered there are several steps you will need to follow:
+
++ Locate the data you want to use.
++ Register a use. Within your account you will have to create a "use" you can think of an use a project for which you plan to use one or more datasets that you obtain from this repository. 
++ Download the data. Always make sure you download it to the folder for your R project.
+
+These steps are described [here](https://www.ukdataservice.ac.uk/get-data/how-to-access/downloadorder). There is also a video that explains the required steps in that webpage. In the discovery section of their webpage I want you to locate the unrestricted teaching version of the Crime Survey for England and Wales (SN8011), as shown in the image below.
+
+![Discovery and CSEW](second_session_imgs/CSEW.png)
+
+Follow the link to this dataset. This dataset is fully open access, so in this case you don't have to go through so many intermediate steps in order to use it. You can download the dataset directly from the link provided. Before you do that, have read the information about this dataset that is provided [in the webpage](https://discover.ukdataservice.ac.uk/catalogue?sn=8011#administrative):
+
+![The CSEW Unrestricted Teaching Data](second_session_imgs/CSEW2.png)
+
+You will see that you can download the data in three different formats. Two of them are proprietary (SPSS and STATA) -so that you can use them with those expensive (and definetly not better than R) pieces of software. The third one is just tab delimited. Since SPSS is still fairly commonly used in British universities, we will teach you how to read that format into R. So download the SPSS version of it.
+
+Before you can read the files into R you need to unzip them. The files you have downloaded have been compressed into a zip file. You could use a standard zip app to do the job or you could use the command line in R to do that. We are going to use the *unzip* function for that. To find out what this function can do we will use another handy function: the *help* function.
+
+```{r}
+help(unzip)
+```
+
+So, this function is equivalent to typing something in the search button of the Help window in the right bottom corner of of RStudio. But a bit quicker. You don't have to stop typing to use the mouse. Have a look a the arguments and defaults for this function. Ok, now we are going to use it to fully unzip everything that came with the zipped file.
+
+```{r}
+#First, I create an object with the filepath. This is good practice when you work with
+#filepaths. What the filepath is in your case may vary, so make sure that you use
+#the filepath that connects to your project folder (where you should have downloaded
+#the zip file)
+zip_f <- "P:/LAWS20452/8011spss_92d3935a962138b37dc84c5e11c8365b.zip" 
+#We use the unzip function and pass as an argument the folder we want to unzip.
+unzip(zip_f)
+```
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

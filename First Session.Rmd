@@ -42,15 +42,15 @@ You don't need to install the software in the computer clusters, because it is a
 
 In this session the first thing we will do is to develop some basic familiarity with RStudio. RStudio is what we call an IDE, an **integrated development environment**. It is a fancy way of saying that it is a cool tool designed to write programming code, which is a bit more useful than working directly from R. Every time you open up RStudio you are in fact starting an R session. RStudio automatically runs R in the background. We will be interacting with R in this course unit via RStudio.
 
-![R Studio](introDayImgs/rstudio.png)
+![R Studio](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/rstudio.PNG) 
 
 When you first open R studio, you see there are 3 main windows. The bigger one to your left is the console, here you see that RStudio is indeed opening R and you can see what version of R you are running. Depending on whether you are using the cluster machines or your own installation this may vary, but don't worry too much about it. R is constantly being updated.
 
-![Opening a script](introDayImgs/openscript.png)
+![Opening a script](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/openscript.png)
 
 In fact, the view is structured so that you have 4. Click in the *File* drop down Menu, select *New File*, then *R Script*. You will now see the 4 window areas in display. On each of these areas you can shift between different views and panels. You can also use your mouse to resize the different windows if that is convenient.
 
-![4 windows](introDayImgs/the4views.png)
+![4 windows](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/the4views.png)
 
 Look for example at the bottom right area. You can see in the tabs that there are different views available: *Files*, *Plots*, *Packages*, *Help*, and *Viewer*. The Files allow you to see the files in the physical directory that is currently set up as your working environment. In the plots panel you will see any data visualisations you produce. We haven't yet done any, so it is empty at the moment. If you click in **packages** you will see the packages that are currently available in your installation. 
 
@@ -72,19 +72,19 @@ Technically, an RStudio project is just a directory with the name of the project
 
 When a project is reopened, RStudio opens every file and data view that was open when the project was closed last time around. Let's learn how to create a project. Go to the *File* drown menu and select *New Project*.
 
-![newproject1](introDayImgs/newproject.png)
+![newproject1](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/newproject.png)
 
 That will open a dialog box where you ask to specify what kind of directory you want to create. Select new working directory in this dialog box.
 
-![newproject2](introDayImgs/newproject2.png)
+![newproject2](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/newproject2.PNG)
 
 Now you get another dialog box (at least you have an older version of RStudio) where you have to specify what kind of project you want to create. Select the first option *New Project*.
 
-![newproject3](introDayImgs/newproject3.png)
+![newproject3](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/newproject3.PNG)
 
 Finally, you get to select a name for your project (in the image below I use the code for this course unit, you can use any sensible name you prefer) and you will need to specify the folder in which to place this directory. If you are using a cluster machine use the P: drive, otherwise select what you prefer in your laptop.
 
-![newproject4](introDayImgs/newproject4.png)
+![newproject4](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/newproject4.PNG)
 
 With simple projects a single script file and a data file is all you may have. But with more complex projects, things can rapidly become messy. So you may want to create subdirectories within this project folder. I tipically use the following structure in my own work to put all files of a certain type in the same subdirectory:
 
@@ -122,7 +122,7 @@ In R, you can pass a number of **arguments** to any function. These arguments co
 
 Beware, every R function admits different kind of arguments. Learning R involves not only learning different functions but also learning what are the valid arguments you can pass to each function.
 
-![Results in console](introDayImgs/consoleresults.png)
+![Results in console](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/consoleresults.png)
 
 
 As indicated above, the window in the bottom left cortner is the main **console**.You will see that the words "I hate computers" appear printed there.  If rather than using R Studio you were working directly from R, that's all you would get: the main console where you can write code interactively (rather than all the different windows you see in RStudio). You can write your code directly in the main console and execute it line by line in an interactive fashion. However, we will be running code from scripts, so that you get used to the idea of properly documenting all the steps you take,
@@ -133,7 +133,7 @@ R packages vary on quality and complexity. You can find packages in different pl
 
 We are going to install a package so that you see how the installation is done. Go to the right bottom set of windows and click on the *Packages tab*. There you will see all the packages that are currently installed in the machine you are using. 
 
-![Packages view and list](introDayImgs/packages.png)
+![Packages view and list](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/packages.png)
 
 
 If you just installed R in your laptop you will see a shortish list of packages that constitute the basic installation of R. If you are using one of the machines in the computer cluster this list is a bit longer, because we ask IT to install some of the most commonly used packages. But knowing how to install packages is pretty essential, since you will want to do it very often.
@@ -171,7 +171,7 @@ Ok, in the Packages window scroll down until you find this package listed. Here 
 
 Click in the name *dplyr*. You will see that RStudio has now brought you to the Help tab. Here is where you find the help files for this package, including all the available documentation.
 
-![dplyr help](introDayImgs/dplyrhelp.png)
+![dplyr help](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/dplyrhelp.png)
 
 
 Every beginner in R will find these help files a bit confusing. But after a while, their format and structure will begin to make sense to you. Click where it says *User guides, package vignettes, and other documentation*. Documentation in R has become much better since people started to write **vignettes** for their packages. They are little tutorials that explain with examples what each package does. Click in the *Introduction to dplyr* that you see listed here (the html link). What you will find there is an html file that gives you a detailed tutorial on this package. You don't need to read it now, but remember that this is one way to find help when using R. You will learn to love vignettes.
@@ -277,7 +277,7 @@ You will get the following message: `"Error in eval(expr, envir, enclos): object
 
 Remember computers are very literal. They are like dogs. You can tell a dog "sit" and if it has been trained it will sit. But if you tell a dog "would you be so kind as to relax a bit and lay down in the sofa?", it won't have a clue what you are saying and will stare at you like you have gone mad. Error messages are computers ways of telling us "I really want to help you but I don't really understand what you mean" (never take them personal, computers don't hate you).
 
-![Picture by Alex Brown -CC-BY-2.0](introDayImgs/dogs.png)
+![Picture by Alex Brown -CC-BY-2.0](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/dogs.png)
 
 When you get an error message or implausible results, you want to look back at your code to figure out what is the problem. This process is called **debugging**. There are some proper systematic ways to write code that facilitate debugging, but we won't get into that here. R is very good with automatic error handling at the levels we'll be using it at. Very often the solution will simply involve correcting the spelling.
 
@@ -457,13 +457,13 @@ These results printed in the may console may not make too much sense to you at t
 
 Go now to the global environment panel and left click on the data frame hate_crimes. This will open the data viewer in the top left section of RStudio. What you get there is a spreadsheet with 12 variables and 51 observations. Each variable in this case is providing you with information (demographics, voting patterns, and hate crime) about each of the US states.  
 
-![Data view](introDayImgs/dataview.png)
+![Data view](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/dataview.png)
 
 ##Exploring data
 
 Ok, let's now have a quick look at the data. There are so many different ways of producing summary stats for data stored in R that is impossible to cover them all! We will just introduce a few functions that you may find useful for summarising data. Before we do any of that it is important you get a sense for what is available in this data set. Go to the help tab and in the search box input the name of the data frame, this will take you to the documentation for this data frame. Here you can see a list of the available variables.
 
-![Codebook](introDayImgs/codebook.png)
+![Codebook](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/introDayImgs/codebook.png)
 
 Let's start with the *mean*. This function takes as an argument the numeric variable for which you want to obtain the mean. Because of the way that R works you cannot simply put the name of the variable you have to tell R as well in which data frame is that variable located. To do that you write the name of the data frame, the dollar sign, and then the name of the variable you want to summarise. If you want to obtain the mean of the variable that gives us the proportion of people that voted for Donald Trump you can use the following expression:
 
@@ -540,9 +540,6 @@ Keep in mind though that you should not then panic if you open your next RStudio
 
 + Obtain the mean age of people who died from interactions with police included in the *police_killings* dataset from the *fivethirtyeight* package. You will need to provide all the code you use to obtain this response. I'll give you two clues: (1) NA is not a valid answer and (2) you *may* need to look at the help files for the *mean()* function in order to obtain a valid response.
 
-```{r}
-sessionInfo()
-```
 
 
 
