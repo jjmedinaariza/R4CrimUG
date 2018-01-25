@@ -14,19 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - [Obtaining data from social science repositories](#obtaining-data-from-social-science-repositories).
 - [Getting a sense of your data](#getting-a-sense-of-your-data).
-- [Getting organised: R Projects](#getting-organised-r-projects).
-- [Talk to your computer](#talk-to-your-computer).
-- [More on packages](#more-on-packages).
-- [Using objects and functions](#using-objects-and-functions).
-- [More on objects](#more-on-objects).
-- [Vectors](#vectors).
-- [On comments](#on-comments).
-- [Factors](#factors).
-- [Naming conventions for objects in R](#naming-conventions-for-objects-in-r).
-- [Dataframes](#dataframes).
-- [Exploring data](#exploring-data).
-- [Quitting RStudio](#quitting-rstudio).
-- [Homework](#homework).
+
 
 
 ## Obtaining data from social science repositories
@@ -87,7 +75,7 @@ We are going to use the *read_spss()* function. Use the *help()* function to fin
 
 Ready? Let's load it now.
 
-```{r, eval=FALSE}
+```{r}
 #First, we create an object to identify the pathfile. You will need to change this to whatever is #appropriate in your case.
 csew_loc <-("C:/Users/Juanjo Medina/Dropbox/1_Teaching/1 Manchester courses/20452 Modelling Criminological Data/R4Crim/UKDA-8011-spss/spss/spss19/csew1314teachingopen.sav")
 #Next we will use the function to read the data. But we don't simply want to read the data, we #want to store it in our environment. To do that we will create an object, we can call it csew, #and inside we will put whatever comes out from reading the .sav file using the read_spss #function.
@@ -144,15 +132,45 @@ class(csew$sex)
 class(csew$antisocx)
 ```
 
-We talked about numeric vectors in week one. It is simply a collection of numbers. But what is a labelled vector? This is a new type of vector introduced by the *haven* package. Labelled vectors are categorical variables that have labels. 
+We talked about numeric vectors in week one. It is simply a collection of numbers. But what is a labelled vector? This is a new type of vector introduced by the *haven* package. Labelled vectors are categorical variables that have labels. Go to the *Environment* panel and left click in the csew object. This should open the data browser in the top left quadrant of RStudio.
+
+![Data view](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/dataview.png)
+
+If you look carefully you will see that the various columns that include categorical variables only contain numbers. In many statistical environments, such as SPSS, that is a common standard. The variables have a numeric value for each observation and then each of these numeric values is associated with a label. This kind of make sense when memory was an issue for this was an efficient way of saving resources. These days it makes less sense. But labelled vectos give you a chance to reproduce data from other statistical environments without losing any fidelity in the import process. See what happens if we try to summarise this labelled vector. We will use the *table()* to provide a count of observations on the various valid values of the *sex* variable. It is a function to obtain your frequency distribution.
 
 ```{r}
-csew$sex
-summary(csew$sex)
+table(csew$sex)
 ```
 
+So, we see that we have 4037 observations classed as 1 and 4806 classed as 2. If only we knew what those numbers represent! Well, we actually do. We will use the *attributes()* function to see the different "compartments"" within your "box", your object.
 
-There is a way that you can apply a function to all elements of a vector (list or dataframe). You can use the functions `sapply()`, `lapply()`, and `mapply()`  . To find out more about when to use each one see [here](https://www.r-bloggers.com/using-apply-sapply-lapply-in-r/). 
+```{r}
+attributes(csew$sex)
+```
+
+So this object has different compartments. The first one is called label and it provides a description of what the variable sex measures. The second compartment explains the original format in which it was. The third one identifies the class of the vector. Whereas the final one *labels* provides the labels that allows us to identify what the meaning of 1 and 2 are in this context.
+
+Last week we said that many R functions expects factors when you have categorical data, so typically after import into R you may want to coerce your labelled vectors into factors. To do that you need to use the *as_factor()* function. Let's see how we do that.
+
+```{r}
+#This code asks R to create a new column in your csew tibble that is going to be 
+#called sex_f. Typically, when you alter variables you can to create a new one so
+#that the original gets preserved in case you do something wrong. Then we use the
+#as_factor() function to explain to R that what we want to do is to get the original
+#sex variable and mutate it into a factor, this resulting factor is what will be stored
+#in the new column.
+csew$sex_f <- as_factor(csew$sex)
+```
+
+You will see now that you have 33 variables in your dataset, look at the environment to check. Let's explore the new variable we have created (you can also look for the new variable in the data browser and see how it looks different to the original sex variable):
+
+```{r}
+class(csew$sex_f)
+table(csew$sex_f)
+attributes(csew$sex_f)
+```
+
+So far we have a look at columns in your dataframe one at the time. But there is a way that you can apply a function to all elements of a vector (list or dataframe). You can use the functions `sapply()`, `lapply()`, and `mapply()`  . To find out more about when to use each one see [here](https://www.r-bloggers.com/using-apply-sapply-lapply-in-r/). 
 
 For example, we can use the `lapply()` function to look at each column and get its class. To do so, we have to pass two arguments to the `lapply()` function, the first is the name of the dataframe, to tell it what to look through, and the second is the function we want it to apply to every column of that function. 
 
@@ -161,5 +179,212 @@ So we want to type "lapply(" + "name of dataframe" + "," + "name of function " +
 Which is: 
 
 ```{r}
-lapply(BCS0708, class)
+lapply(csew, class)
 ```
+
+As you can see many variables are classed as labelled. This is common with survey data. Many of the questions in social surveys measure the answers as categorical variables (e.g., these are nominal or ordinal level measures).
+
+Another useful function is `str()`, which will return: the name of the variable; the class of each column; the number of levels or categories (if it is a factor); and the values for the first few cases in the dataset. You can pass as an argument the dataframe object or a column in the dataframe. Let's just look at the *poorhou* variable in this dataset.
+
+```{r}
+str(csew$poorhou)
+```
+
+You can also use the `head()` function if you just want to visualise the values for the first few cases in your dataset. The next code for example ask for the values for the first two cases.
+
+```{r}
+head(csew, 2)
+```
+
+In the same way you could look at the last two cases in your dataset using `tail()`:
+
+```{r}
+tail(csew, 2)
+```
+
+It is good practice to do this to ensure R has read the data correctly and there's nothing terribly wrong with your dataset. If you have access to SPSS you can open the original file in SPSS and check if there are any discrepancies, for example. It can also give you a first impression for what the data looks like.
+
+One thing you may also want to do is to see if there are any **missing values**. For that we can use the `is.na()` function. Missing values in R are coded as NA. The code below, for example, asks for NA values for the variable *antisocx* in the *csew* object for observations 1 to 10:
+
+```{r}
+is.na(csew$antisocx[1:10])
+```
+
+The result is a logical vector that tells us if it is true that there is missing (NA) data for each of those first ten observations. You can see that there are 7 observations out of those 10 that have missing values for this variable.
+
+
+```{r}
+sum(is.na(csew$antisocx)) 
+
+```
+
+This is asking R to sum how many cases are TRUE NA in this variable. When reading a logical vector as the one we are creating, R will treat the FALSE elements as 0s and the TRUE elements as 1s. So basically the sum() function will count the number of TRUE cases returned by the is.na() function.
+
+You can use a bit of a hack to get the proportion of missing cases instead of the count:
+
+```{r}
+mean(is.na(csew$antisocx))
+
+```
+
+This code is exploiting the mathematical fact that the mean of binary outcomes (0 or 1) gives you the proportion of 1s in your data. If you see more than 5% of the cases declared as NA, you need to start thinking about the implications of this. Beware of formulaic application of rules of thumb such as this though! In this case, we know that 75.69% of the observations have missing values in this variable. When you see things like this the first thing to do is to look at the codebook to try to get some clues as to why there are so many missing cases. With survey data you often have questions that are simply not asked to everybody, so it's not necessarily that something went very wrong with the data collection, but simply that the variable in question was only used with a subset of the sample.
+
+There is a whole field of statistics devoted to doing analysis when missing data is a problem. R has extensive capabilities for dealing with missing data -see for example [here](http://www.crcpress.com/product/isbn/9781439868249). For the purpose of this introductory course, we only explain how to do analysis that ignore missing data. This is often referred to a full/complete case analysis, because you only use observations for which you have full information in all the variables you employ. You would cover techniques for dealing with this sort of issues in more advanced courses.
+
+When you are dealing with labelled, character, or factor columns, it could be that you need to dig a bit deeper to get the full extent of your missing data. Let's look at the *poorhou* variable.
+
+```{r}
+sum(is.na(csew$poorhou)) 
+```
+
+It looks as if we have no NA data here. But is that the case? Let's print the frequency distribution.
+
+```{r}
+#In this code we use as_factor() as before but rather than create a new column in the
+#data frame we are creating a temporay version of this variable that we pass as an
+#argument to the table() function. This may be a quick way of getting results without
+#having to modify your dataframe object.
+table(as_factor(csew$poorhou))
+
+```
+
+Notice that there is one level called "not coded". These are cases in which the interviewers that administered the questionnaire for whatever reason did not noted their observations as to whether poor housing was prevalent in the area where the respondent lived. That's another way of saying we have no idea what the appropriate value for his variable is in those 26 cases. In other words, that is missing data as well. Later we will learn how to recode data in R and we will see how to change 26 into NA.
+
+##Data wrangling with dplyr
+
+The data analysis workflow has a number of stages. The diagram below (produced by Hadley Wickham) is a nice illustration of this process:
+
+![Data analysis process](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/data-science-explore.png)
+
+We have started to see different ways of bringing data into R. And we have also started to see how we can explore our data. It is now timw we start discussing one of the following stages, transform. A good deal of time and effort in data analysis is devoted to this. You get your data and then you have to do some transformations to it so that you can answer the questions you want to address in your research.
+
+R offers a great deal of flexibility in how to do this kind of thing, Here we are going to illustrate some of the functionality of the *dplyr* package for data carpentry. This package is part of the tydiverse and it aims to provide a friendly and modern take on how to work with dataframes (or tibbles) in R. It offers, as the authors of the package put it, "a flexible grammar of data manipulation". 
+
+Dplyr aims to provide a function for each basic verbs of data manipulation:
+
++ *filter()* to select cases based on their values.
++ *arrange()* to reorder the cases.
++ *select()* and *rename()* to select variables based on their names.
++ *mutate()* and *transmute()* to add new variables that are functions of existing variables.
++ *summarise()* to condense multiple values to a single value.
++ *sample_n()* and *sample_frac()* to take random samples.
+
+In this session we will introduce and practice some of these. But we won't have time to cover everything. There is, however, a very nice set of vignettes for this package in the help files, so you can try to go through those if you want a greater degree of detail or more practice. 
+
+We are going to illustrate dplyr with the police_killings dataframe available in the fivefirtyeight package. Load this data into your working environment.
+
+```{r}
+library(fivethirtyeight)
+data("police_killings")
+
+```
+
+Once you have done this you can have a quick look at it in the data browser:
+
+```{r, eval=FALSE}
+
+View(police_killings)
+```
+
+I suggest you also have a quick look at the help files for this dataset. Datasets that are included in packages will typically have a short codebook as part of the helpfiles. Reading these will give you a better sense of what is available here and where the data represents.
+
+```{r}
+help("police_killings")
+```
+
+Now let's load the package:
+
+```{r}
+library(dplyr)
+```
+
+Notice that when you run this package you get a series of warnings. One the things with a language like R is that sometimes packages introduce functions that have the same name than others that are already loaded into your session. When that happens the newly loaded ones will over-ride the previous ones. You can still use them but you will have to refer to them explicitly. Otherwise R will assume you are using the function most recently loaded:
+
+```{r, eval=FALSE}
+#Example:
+#If you use load dplyr and then invoke the *filter()* function R will assume you are using the #filter function from dplyr rather than the *filter()* function that exist in the *stats* #package, which part of the basic installation of R. If after loading dplyr you want to use the #filter function from the stats package you will have to invoke it like this:
+stats::filter()
+#Don't run this code. You would need to pass some valid arguments for this to produce meaningful #results.
+```
+
+##Using dplyr single verbs
+
+One of the first operations you may want to carry out is to subset the dataframe based on values of particular variables. Say you only want to focus on people that were killed in Connecticut state. For this kind of operations we use the *filter()* function. Like all single verbs in dplyr, the first argument is the tibble (or data frame). The second and subsequent arguments refer to variables within that data frame, selecting rows where the expression is TRUE.
+
+```{r}
+#CT is the abbreviation used to designate Connecticut in this dataset and state the name
+#of the variable that includes this information.
+filter(police_killings, state == "CT")
+
+```
+
+You may want to filter based on a combination of criteria. For example, say we want to select males killed in Alabama:
+
+```{r}
+filter(police_killings, state == "AL", gender == "Male")
+```
+
+We have so far selected from variables encoded of character class. That's way you see quotes surrounding the values. If our variable is numeric we don't use quotes. So say we want to select males, killed in February, and older than 50. We would write as follows:
+
+```{r}
+
+filter(police_killings, gender == "Male", month == "February", age >= 50)
+
+```
+
+You may have noticed I wrote "=="" instead of "=" and ">=" rather than "=>". Logical operators in R are not written exactly the same way than in normal practice. Keep this in mind when you get error messages from running your code. Often the source of your error may be that you are writing the logical operators the wrong way (as far as R is concerned). Look [here](https://www.statmethods.net/management/operators.html) for valid logic operators in R.
+
+Not only you can subset your data depending on attributes of your cases. You can also sort your data frame according to this. Say you want to rearrange the order in your data frame by day and month of the killing. For this you use the dplyr *arrange()* function.
+
+```{r}
+arrange(police_killings, month, day)
+```
+
+Sometimes you may want to select only a few variables. Earlier we said than real life data may have hundreds of variables and only a few of those may be relevant for your analysis. Say you only want gender, age, and ethnicity from this dataset. For this kind of operations you use the *select()* function.
+
+```{r}
+#We are going to create a smaller dataset based in our selection of variables
+police_killings_small <- select(police_killings, age, gender, raceethnicity)
+#Then auto-print to have a peak
+police_killings_small
+
+```
+
+The dplyr package also offers a helpful function to rename columns in your data frame. Say we think raceethnicity is a bit of a mouthful. Let's just rename this to "ethnicity". We used the conveniently named *rename()* function. In the arguments make sure you put first the new name and then the old name. It is very easy to make mistakes around this.
+
+```{r}
+rename(police_killings_small, ethnicity = raceethnicity)
+```
+
+If you autoprint the dataset you will see the variable is still called raceethnicity. If you want to permanently rename the variable you will have to be more explicit about this and explain to R that you want the results of running the rename function into your existing data frame like this:
+
+```{r}
+police_killings_small <- rename(police_killings_small, ethnicity = raceethnicity)
+```
+
+##Using dplyr for grouped operations
+
+So far we have used dplyr sinle verbs for ungrouped operations. But we can also use some of the functionality of dplyr for obtaining answers to questions that relate to groups of cases within our dataframe. Imagine that you want to know if Black suspects, as compared to other ethnicities, are more likely to be shot in areas where there is more poverty? How could you figure that one out? For answering this kind of questions we can use the *group_by()* function in conjunction with other dplyr functions. In particular we are going to look at the *summarise* function and we will introduce the **piping operator**.
+
+```{r}
+#First we group the observations by race in a new object
+by_race <- group_by(police_killings, raceethnicity)
+#Then we run the summarise function to provide some useful summaries of the
+#groups we are using: the number of cases and the mean of the poverty rate
+#of the census tract in which the killing took place
+poverty <- summarise(by_race,
+  count = n(),
+  poverty = mean(pov, na.rm = TRUE))
+#autoprint the results stored in the newly created object
+poverty
+
+```
+
+So, what is this telling you? You may want to have a look at the [original five thirty eight story](http://fivethirtyeight.com/features/where-police-have-killed-americans-in-2015) to make sense of these results.
+
+##Homework
+
+1. Obtain summary statistics for the variable worryx and the variable educat3 in the csew. You will need to apply knowledge from previous course units and from last week's session, not only from what you have learnt today.
+
+2. 
+
