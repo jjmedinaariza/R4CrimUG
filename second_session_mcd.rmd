@@ -43,7 +43,7 @@ You will see that you can download the data in three different formats. Two of t
 
 Before you can read the files into R you need to unzip them. The files you have downloaded have been compressed into a [zip](https://en.wikipedia.org/wiki/Zip_(file_format)) file. You could use a standard zip app to do the job or you could use the command line in R to do that. We are going to use the *unzip* function for that. To find out what this function can do we will use another handy function: the *help* function.
 
-```{r}
+```{r, eval=FALSE}
 help(unzip)
 ```
 
@@ -51,7 +51,7 @@ As you can see running this function is equivalent to typing something in the se
 
 Ok, now we are going to use it to fully unzip everything that came with the zipped file. Note that R requires forward slashes (/) not back slashes (\) when specifying a file location. 
 
-```{r}
+```{r, eval=FALSE}
 #First, I create an object with the filepath. This is good practice when you work with
 #filepaths. What the filepath is in your case may vary, so make sure that you use
 #the filepath that connects to your project folder (where you should have downloaded
@@ -91,13 +91,15 @@ What is the first thing you need to ask yourself when you look at a dataset. Dat
 
 ![First questions to your data](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/firstlookatdata.jpg)
 
+
 As Mara Averick (somebody you want to follow at twitter if you want to be in top of R related resources) suggests:
 
 ![Dating tips?](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/relationships.png)
 
-Many of these questions are things you should be able to answer after looking at the documentation that you downloaded. The datasets that you will find in social science repositories often come with very detailed documentation. It is critical you read this documentation if you don't want to make mistakes later on, often from making unwarranted assumptions. I'm talking from experience! But in real life a good deal of data won't come neatly packaged and documented as we see here. Here we are going to introduce a few functions that will help you to start making sense for what you have just downloaded.
 
-Summarising the data is the first step in any analysis and it is also used for finding out potential problems with the data. Regarding the latter you want to look out for: missing values; values outside the expected range (e.g., someone aged 200 years); values that seem to be in the wrong units; mislabelled variables; or variables that seem to be the wrong class (e.g., a quantitative variable encoded as a factor). Lets start by the basic things you always look first in a datasets. 
+Many of these questions are things you should be able to answer after looking at the documentation that you downloaded. The datasets that you will find in social science repositories often come with very detailed documentation. It is critical you read this documentation if you don't want to make mistakes later on, often from making unwarranted assumptions about what's in your dataset. I'm talking from experience! But in real life a good deal of data won't come as neatly packaged and documented as we see here. 
+
+Here we are going to introduce a few functions that will help you to start making sense for what you have just downloaded. Summarising the data is the first step in any analysis and it is also used for finding out potential problems with the data. Regarding the latter you want to look out for: missing values; values outside the expected range (e.g., someone aged 200 years); values that seem to be in the wrong units; mislabelled variables; or variables that seem to be the wrong class (e.g., a quantitative variable encoded as a factor). Lets start by the basic things you always look first in a datasets. 
 
 You can see in the Environment window that csew has 8843 observations (rows) of 32 variables (columns). You can also obtain this information using code. Here you want the  **DIM**ensions of the dataframe (the number of rows and columns) so you use the `dim()` function:
 
@@ -114,13 +116,15 @@ names(csew)
 
 As you may notice, these names are hard to interpret. You need to look at the codebook that you unzipped earlier to figure out what each of those variables is actually measuring. The bad news is that real life datasets in social science are much larger than this and have many more variables (hundreds or more). The good news is that typically you will only need a small handful of them and will only require to deeply familiarise yourself with that smaller subset.
 
-You also want to undersatand what the csew object actually is. You can do that using the *class()* function:
+If you open the dataset in the data viewer of RStudio you will see that each column has a variable name and underneath a longer and more meaninful *variable label* that tells you what each variable means. 
+
+You also want to understand what the csew object actually is. You can do that using the *class()* function:
 
 ```{r}
 class(csew)
 ```
 
-What does tbl stands for? It refers to **tibbles**. This is essentially a new type of data structure introduced into R. Tibbles are data frames. That's what the class() function also says, but they introduce some tweaks to make life easier. The R language has been around for a while and sometimes things that made sense a couple of decadea ago, make less sense now. A number of programmers are trying to create code that is more modern and more useful today. They are doing this by introducing a set of packages that speak to each other in order to modernise R without breaking existing code. This set of packages is called the **tidyverse**.  Tibbles are dataframes that have been optimised within this new set of packages. You can read a bit more about tibbles [here](http://r4ds.had.co.nz/tibbles.html).
+What does tbl stands for? It refers to **tibbles**. This is essentially a new type of data structure introduced into R. Tibbles *are* data frames. That's what the class() function also says, but they introduce some tweaks to make life easier. The R language has been around for a while and sometimes things that made sense a couple of decades ago, make less sense now. A number of programmers are trying to create code that is more modern and more useful today. They are doing this by introducing a set of packages that speak to each other in order to modernise R without breaking existing code. This set of packages is called the **tidyverse**.  Tibbles are dataframes that have been optimised within this new set of packages. You can read a bit more about tibbles [here](http://r4ds.had.co.nz/tibbles.html).
 
 You can also look at the class of each individual column. As discussed, class of the variable lets us know if its an integer (number) or factor. 
 
@@ -136,6 +140,7 @@ We talked about numeric vectors in week one. It is simply a collection of number
 
 ![Data view](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/dataview.png)
 
+
 If you look carefully you will see that the various columns that include categorical variables only contain numbers. In many statistical environments, such as SPSS, that is a common standard. The variables have a numeric value for each observation and then each of these numeric values is associated with a label. This kind of make sense when memory was an issue for this was an efficient way of saving resources. These days it makes less sense. But labelled vectos give you a chance to reproduce data from other statistical environments without losing any fidelity in the import process. See what happens if we try to summarise this labelled vector. We will use the *table()* to provide a count of observations on the various valid values of the *sex* variable. It is a function to obtain your frequency distribution.
 
 ```{r}
@@ -148,7 +153,7 @@ So, we see that we have 4037 observations classed as 1 and 4806 classed as 2. If
 attributes(csew$sex)
 ```
 
-So this object has different compartments. The first one is called label and it provides a description of what the variable sex measures. The second compartment explains the original format in which it was. The third one identifies the class of the vector. Whereas the final one *labels* provides the labels that allows us to identify what the meaning of 1 and 2 are in this context.
+So this object has different compartments. The first one is called label and it provides a description of what the variable sex measures. This is what you saw in the RStudio data viewer earlier. The second compartment explains the original format in which it was. The third one identifies the class of the vector. Whereas the final one *labels* provides the labels that allows us to identify what the meaning of 1 and 2 are in this context.
 
 Last week we said that many R functions expects factors when you have categorical data, so typically after import into R you may want to coerce your labelled vectors into factors. To do that you need to use the *as_factor()* function. Let's see how we do that.
 
@@ -256,7 +261,7 @@ The data analysis workflow has a number of stages. The diagram below (produced b
 
 ![Data analysis process](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/data-science-explore.png)
 
-We have started to see different ways of bringing data into R. And we have also started to see how we can explore our data. It is now timw we start discussing one of the following stages, transform. A good deal of time and effort in data analysis is devoted to this. You get your data and then you have to do some transformations to it so that you can answer the questions you want to address in your research.
+We have started to see different ways of bringing data into R. And we have also started to see how we can explore our data. It is now time we start discussing one of the following stages, **transform**. A good deal of time and effort in data analysis is devoted to this. You get your data and then you have to do some transformations to it so that you can answer the questions you want to address in your research.
 
 R offers a great deal of flexibility in how to do this kind of thing, Here we are going to illustrate some of the functionality of the *dplyr* package for data carpentry. This package is part of the tydiverse and it aims to provide a friendly and modern take on how to work with dataframes (or tibbles) in R. It offers, as the authors of the package put it, "a flexible grammar of data manipulation". 
 
@@ -302,9 +307,9 @@ Notice that when you run this package you get a series of warnings. One the thin
 
 ```{r, eval=FALSE}
 #Example:
-#If you use load dplyr and then invoke the *filter()* function R will assume you are using the #filter function from dplyr rather than the *filter()* function that exist in the *stats* #package, which part of the basic installation of R. If after loading dplyr you want to use the #filter function from the stats package you will have to invoke it like this:
+#If you use load dplyr and then invoke the *filter()* function R will assume you are using the filter function from dplyr rather than the *filter()* function that exist in the *stats* package, which is part of the basic installation of R. If after loading dplyr you want to use the filter function from the stats package you will have to invoke it like this:
 stats::filter()
-#Don't run this code. You would need to pass some valid arguments for this to produce meaningful #results.
+#Notice the grammas, first you write the name of the package, then colon twice, and then the name of the function. Don't run this code. You would need to pass some valid arguments for this to produce meaningful results.
 ```
 
 ##Using dplyr single verbs
@@ -314,6 +319,7 @@ One of the first operations you may want to carry out is to subset the dataframe
 ```{r}
 #CT is the abbreviation used to designate Connecticut in this dataset and state the name
 #of the variable that includes this information.
+
 filter(police_killings, state == "CT")
 
 ```
@@ -364,9 +370,10 @@ police_killings_small <- rename(police_killings_small, ethnicity = raceethnicity
 
 ##Using dplyr for grouped operations
 
-So far we have used dplyr sinle verbs for ungrouped operations. But we can also use some of the functionality of dplyr for obtaining answers to questions that relate to groups of cases within our dataframe. Imagine that you want to know if Black suspects, as compared to other ethnicities, are more likely to be shot in areas where there is more poverty? How could you figure that one out? For answering this kind of questions we can use the *group_by()* function in conjunction with other dplyr functions. In particular we are going to look at the *summarise* function and we will introduce the **piping operator**.
+So far we have used dplyr sinle verbs for ungrouped operations. But we can also use some of the functionality of dplyr for obtaining answers to questions that relate to groups of cases within our dataframe. Imagine that you want to know if Black suspects, as compared to other ethnicities, are more likely to be shot in areas where there is more poverty? How could you figure that one out? For answering this kind of questions we can use the *group_by()* function in conjunction with other dplyr functions. In particular we are going to look at the *summarise* function.
 
 ```{r}
+
 #First we group the observations by race in a new object
 by_race <- group_by(police_killings, raceethnicity)
 #Then we run the summarise function to provide some useful summaries of the
@@ -381,6 +388,33 @@ poverty
 ```
 
 So, what is this telling you? You may want to have a look at the [original five thirty eight story](http://fivethirtyeight.com/features/where-police-have-killed-americans-in-2015) to make sense of these results.
+
+....
+
+##Recoding data in R and more fun with dplyr
+
+Often you will be place in a situation where you need to do some transformations to the variables that you are working with. In this section we are going to go back to the csew tibble. But before we get into recoding, and so that you appreciate the differences when recoding numeric and categorical variables, first we are going to recode the labelled vectors in this tibble into factors. If you were dealing with something like SPSS most likely you would need to do a lot of point and clicking to get this done, and it would take you quite a bit of time. One of the advantages of using code is that we can automatise things, which means that it is the computer, not us, who does the more tedious work. 
+
+In order to mutate all labelled vectors into factors we can use the *mutate_if()* dplyr function using the code below:
+
+```{r}
+#We want to store the results, so we will create new tibble where the categorical variables are
+#encoded as factors. To do this we will apply the mutate_if function. First we ask for the columns that happened to be labelled vectors and then we ask R to coerce these into factors.
+#If we want to check our results we can now see the class of the columns in the new tibble. You will indeed see that we are now dealing with factors. Notice, all we needed was one single line of code. 
+csew_f <- csew %>% mutate_if(is.labelled, as_factor)
+lapply(csew_f, class)
+summary(csew_f)
+
+```
+
+You may have noticed a funny symbol in the code above: *%>%*. This is the so-called **piping operator**. It is a convenient operator in R programming that can be interpreted as "and then". So in the previous code first we said to R create a new object called csew_f in which you are going to put the contents of csew "and then" mutate the columns into factors if they were labelled. This very convenient operator makes writing code a little bit easier. We will see more examples as we go along.
+
+We have talked already about attributes in an object. You can think of these as compartments inside your box. And if you know the name of the compartment you can extract the information on it easily. 
+
+```{r}
+attributes(csew)
+
+```
 
 ##Homework
 

@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - [Install R & RStudio](#install-r-&-rstudio).
 - [Open up and explore RStudio](#open-up-and-explore-rstudio).
+- [Customising the RStudio look](#customising-the-rstudio-look)
 - [Getting organised: R Projects](#getting-organised-r-projects).
 - [Talk to your computer](#talk-to-your-computer).
 - [More on packages](#more-on-packages).
@@ -64,6 +65,12 @@ One of the key advantages of doing data anlysis this way - with code versus with
 
 Don't underestimate how critical this is. **Reproducibility** is becoming a key criteria to assess good quality research. And tools like R allow us to enhance it. You may want to read more about reproducible research [here](http://theconversation.com/the-science-reproducibility-crisis-and-what-can-be-done-about-it-74198).
 
+##Customising the RStudio look
+
+RStudio allows you to customise the way it looks. Working with white backgrounds is not generally a good idea if you care about your eyesight. I'm talking from experience. If you don't want to end up with dry eyes not only it is good you follow the 20-20-20 rule (every 20 minutes look for 20 seconds to an object located 20 feet away from you), but it may also be a good idea to use more eye friendly screen displays. 
+
+Click in the *Tools* menu and select *Global options*. This will open up a pop up window with various options. Select *appearance*. In this section you can change the font type and size, but also the kind of theme background that R will use in the various windows. I use the *Tomorrow Night Bright* theme, but you may prefer a different one. You can preview them and then click apply to select the one you like. This will do nothing other to any of your results or analysis. This is just something you may want to do in order to make things look better and healthier for your.
+
 ##Getting organised: R Projects
 
 We finished the previous section talking about sharing your analytical code. Let's face it. You would not bring a new partner or somebody that you want to impress to your place before tidying a little bit first, wouldn't you? In the same way, if you know you may have to share your code, if you know you may have quests, you may want to keep your analysis, data, and results tidy. RStudio helps a little bit with that. RStudio helps with this by virtue of something called **R Projects**.
@@ -100,11 +107,11 @@ With simple projects a single script file and a data file is all you may have. B
 
 + *Reports and write up*: Here is where I file all the reports and data visualisations that are associated with my analysis.
 
-If you come to my office, you will see it is a very messy place. But my computer is, in contrast, a very tidy environment. You should aimd for your computer workspace to be very organised as well.
+If you come to my office, you will see it is a very messy place. But my computer is, in contrast, a very tidy environment. You should aimd for your computer workspace to be very organised as well. You can create this subdirectories using Windows Explorer or the Files window in RStudio. Why don't you have a go?
 
 ##Talk to your computer
 
-Enough background, let's write some very simple code to talk to your computer. Type the following instructions in the script window. After you are done click in the top right corner where it says *Run* (if you prefer quick shortcuts, you can select the text and then press Ctrol +  Enter):
+Enough background, let's write some very simple code to talk to your computer. First open a new script within the project you just created. Type the following instructions in the script window. After you are done click in the top right corner where it says *Run* (if you prefer quick shortcuts, you can select the text and then press Ctrol +  Enter):
 
 ```{r}
 print("I hate computers")
@@ -205,11 +212,22 @@ Ok, so now we are going to use the function from the *Rtts* package that we look
 
 You also saw that other possible arguments are the speed, volume, speaker, and destfile (where to save the generated file). You also saw that there are default values for all these arguments. For simplicity sake we won't change most of the defaults, which means, we only need to pass as an argument the content. When R sees that you don't explicitly pass and argument it will always use the defaults that are specified in the help files. Keep this in mind: just because you are not giving explicit instructions, it does not mean that you are not giving them, the defaults are specifying things to R that it needs to do (ergo, it is important for you to know what those defaults are).
 
-We will specify, however, a different destination for the file. Put it in your p:drive.
+We will specify, however, a different destination for the file. This requires that you understand how to store things inside your computer. Do you know what a pathfile or a directory is? You may want to have a quick look at the [Wiki article](https://en.wikipedia.org/wiki/Path_(computing)) on it. There is an easy way to figure out what is the pathfile for the project you are currently working on. You can use the getwd() function to do this:
 
 ```{r, eval=FALSE}
-tts_ITRI(my_text, destfile="P:i_hate.wav")
+getwd()
 ```
+If you look at the Files window in the bottom right corner that's the folder where you are working from. My pathfile for my project is this:
+
+"C:/Users/msrtsjm2/Dropbox/1_Teaching/1 Manchester courses/20452 Modelling Criminological Data/R4Crim"
+
+But for yours it will be something different.Use the pathfile you obtain to place the resulting audio file in the right directory. So, for example, if you are using a computer cluster and want to place it in a folder called LAWS20452 you would use the code below:
+
+
+```{r, eval=FALSE}
+tts_ITRI(my_text, destfile="P:/LAWS20452/i_hate.wav")
+```
+
 
 I'm sure you want to hear that now. You could navigate to the folder and open the file with any media app capable of reading .wav files. But we can also use R. We just need another package which needs installation and loading.
 
@@ -223,14 +241,15 @@ Once we loaded we can use one of the functions in this package.
 
 ```{r, eval=FALSE}
 library("tuneR")
-play("P:/i_hate.wav")
+play("P:LAWS20452/i_hate.wav")
 ```
 
-Let's make it more useful for this course. Let's create another object with the physical location of the .wav file.
+If you are using a MAC you may be getting an error message when doing this, if this is the case. Please use the following fix (but notice that you will need to alter the pathfile):
 
-```{r, eval=FALSE}
-my_frustration <- ("P:/i_hate.wav")
-play(my_frustration)
+```{r, eval = FALSE}
+setWavPlayer('/usr/bin/afplay')
+play(shQuote("/Users/reka/Dropbox (The University of Manchester)/31152_60142 GIS and Crime Mapping/2018_labs/i_hate.wav"))
+
 ```
 
 Now you know what to do when things get too much with this class!
