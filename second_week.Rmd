@@ -2,7 +2,7 @@
 title: "Second_Week"
 author: "Juanjo Medina (supplementing material produced as well by Reka Solymosi)"
 date: "11 January 2018"
-output: 
+output:
   html_document: 
   toc: TRUE
   toc_float: TRUE
@@ -15,12 +15,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - [Causality in social science](#causality-in-social-science).
 - [Getting data thanks to reproducibility](#getting-data-thanks-to-reproducibility).
-- [Customising the RStudio look](#customising-the-rstudio-look)
-- [Getting organised: R Projects](#getting-organised-r-projects).
-- [Talk to your computer](#talk-to-your-computer).
-- [More on packages](#more-on-packages).
+- [Getting a sense for your data](#getting-a-sense-for-your-data).
+- [Data wrangling with dplyr](#data-wrangling-with-dplyr).
+- [Using dplyr single verbs](#using-dplyr-single-verbs).
+- [Using dplyr for grouped operations](#using-dplyr-for-grouped-operations).
+- [Making comparisons with numerical outcomes](#making-comparisons-with-numerical-outcomes).
 
-## Introduction: causality
+
+## Causality in social sciences
 
 In today's week we will refresh some of the themes you have explored in previous research methods courses. We are going to talk specifically about causality. This is one of the central concepts in empirical research. We often do research because we want to make causal inferences. We want to be in a position where we establish whether an intervention or a social process is causally linked to crime or some other relevant criminological outcome.
 
@@ -40,7 +42,7 @@ Last week we introduced the notion of reproducible research and said that using 
 
 Amanda Agan and Sonja Starr develop an experiment in which they created 15,220 fake resumes randomly generating these critical characteristics (such as having a criminal record) and used these resumes to send onlin job applications to low-skill, entry level job openings in New Jersey and New York City. All the fictious applicants were male and about 21 to 22 years old. Because they conform to reproducibly standards we can access this data from the *Harvard Dataverse* (a repositoty for open research data). Click [here](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VPHMNT) to locate the data.
 
-![Figure 1](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_wk_imgs/harvarddataverse.PNG) 
+![Figure 1](second_wk_imgs/harvarddataverse.PNG) 
 
 In this page you can see a download section and some files that can be accessed. One of them contains analytical code pertaning to the study and the other contains the data. You also see a link called **metadata**. Metadata is data about data, it simply provides you with some information about the data. If you clink in metadata you will see at the bottom a reference to the software the authors used (STATA). So we know these files are in STATA proprietary format. Let's download the data file and then read the data into R.
 
@@ -70,16 +72,15 @@ You should now have a new object in your global environment. Check the dimension
 *-What is the name of the variable measuring race?* 
 *-What proportion of cases in the dataset have a criminal record?*
 
-##Getting a sense for your data
+## Getting a sense for your data
 
 What is the first thing you need to ask yourself when you look at a dataset. Data are often too big to look at the whole thing. It is almost always impossible to eyeball the entire dataset and see what you have in terms of interesting patterns or potential problems. It is often a case of information overload and we want to be able to extract what is relevant and important about it. But where do you start?  [Here](http://rex-analytics.com/data-analysis-questions-to-ask-the-first-time/) you can find a brief but very useful overview put together by Steph de Silva. Read it before we carry on.
 
-![First questions to your data](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/firstlookatdata.jpg)
-
+![First questions to your data](second_session_imgs/firstlookatdata.jpg)
 
 As Mara Averick (somebody you want to follow at twitter if you want to be in top of R related resources) suggests:
 
-![Dating tips?](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/relationships.png)
+![Dating tips?](second_session_imgs/relationships.png)
 
 Here we are going to introduce a few functions that will help you to start making sense for what you have just downloaded. Summarising the data is the first step in any analysis and it is also used for finding out potential problems with the data. Regarding the latter you want to look out for: missing values; values outside the expected range (e.g., someone aged 200 years); values that seem to be in the wrong units; mislabelled variables; or variables that seem to be the wrong class (e.g., a quantitative variable encoded as a factor). Lets start by the basic things you always look first in a datasets. 
 
@@ -118,7 +119,7 @@ class(banbox$num_stores)
 
 We talked about numeric vectors in week one. It is simply a collection of numbers. But what is a labelled vector? This is a new type of vector introduced by the *haven* package. Labelled vectors are categorical variables that have labels. Go to the *Environment* panel and left click in the banbox object. This should open the data browser in the top left quadrant of RStudio.
 
-![Data view](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_wk_imgs/dataview.png)
+![Data view](second_wk_imgs/dataview.png)
 
 
 If you look carefully you will see that the various columns that include categorical variables only contain numbers. In many statistical environments, such as STATA or SPSS, this is a common standard. The variables have a numeric value for each observation and then each of these numeric values is associated with a label. This kind of made sense when computer memory was an issue - for this was an efficient way of saving resources. These days it makes perhaps less sense. But labelled vectos give you a chance to reproduce data from other statistical environments without losing any fidelity in the import process. See what happens if we try to summarise this labelled vector. We will use the *table()* to provide a count of observations on the various valid values of the *sex* variable. It is a function to obtain your frequency distribution.
@@ -163,7 +164,7 @@ So we want to type "lapply(" + "name of dataframe" + "," + "name of function " +
 
 Which is: 
 
-```{r}
+```{r, eval = FALSE}
 lapply(banbox, class)
 ```
 
@@ -176,6 +177,7 @@ class(banbox$black)
 table(banbox$black)
 
 ```
+
 We know that this variable measures whether someone is black or not. When people use 0 and 1 to code binary responses, typically they use a 1 to denote a positive response, a yes. So, I think it is fair to assume that a 1 here means the respondent is black. Because this variable is of class numeric we cannot simply use as_factor to assign the pre-existing labels and create a new factor. In this case we don't have preexisting labels, since this is not a labelled vector. So what can we do to tidy this variable? We'll we need to do some further work.
 
 ```{r}
@@ -240,11 +242,11 @@ This code is exploiting the mathematical fact that the mean of binary outcomes (
 
 There is a whole field of statistics devoted to doing analysis when missing data is a problem. R has extensive capabilities for dealing with missing data -see for example [here](http://www.crcpress.com/product/isbn/9781439868249). For the purpose of this introductory course, we only explain how to do analysis that ignore missing data. This is often referred to a **full/complete case analysis**, because you only use observations for which you have full information in all the variables you employ. You would cover techniques for dealing with this sort of issues in more advanced courses.
 
-##Data wrangling with dplyr
+## Data wrangling with dplyr
 
 The data analysis workflow has a number of stages. The diagram below (produced by Hadley Wickham) is a nice illustration of this process:
 
-![Data analysis process](https://raw.githubusercontent.com/jjmedinaariza/R4CrimUG/master/second_session_imgs/data-science-explore.png)
+![Data analysis process](second_session_imgs/data-science-explore.png)
 
 We have started to see different ways of bringing data into R. And we have also started to see how we can explore our data. It is now time we start discussing one of the following stages, **transform**. A good deal of time and effort in data analysis is devoted to this. You get your data and then you have to do some transformations to it so that you can answer the questions you want to address in your research.
 
@@ -276,7 +278,7 @@ stats::filter()
 #Notice the grammas, first you write the name of the package, then colon twice, and then the name of the function. Don't run this code. You would need to pass some valid arguments for this to produce meaningful results.
 ```
 
-##Using dplyr single verbs
+## Using dplyr single verbs
 
 One of the first operations you may want to carry out is to subset the dataframe based on values of particular variables. Say we want to replicate the results reported by Agan and Starr in 2017. In this earlier paper, these researchers only used data  from the period prior to the introduction of Ban the Box legislation and only used data from businesses that ask about criminal records in their online applications. How can we recreate this dataset?
 
@@ -303,7 +305,7 @@ aer2017 <- select(aer2017, crime, ged, empgap, black_f, response, daystoresponse
 
 If you now look at the global environment you will see that the aer2017 tibble has reduced in size and now only has 6 columns. If you view the data you will see these are the 6 variables we selected.
 
-##Using dplyr for grouped operations
+## Using dplyr for grouped operations
 
 So far we have used dplyr sinle verbs for ungrouped operations. But we can also use some of the functionality of dplyr for obtaining answers to questions that relate to groups of cases within our dataframe. Imagine that you want to know if applicants with a criminal record are less likely to receive a positive response from employers. How could you figure that one out? For answering this kind of questions we can use the *group_by()* function in conjunction with other dplyr functions. In particular we are going to look at the *summarise* function.
 
@@ -338,7 +340,7 @@ results_2 <- summarise(by_recrace,
 results_2
 ```
 
-##Making comparisons with numerical outcomes
+## Making comparisons with numerical outcomes
 
 We have been looking at relationships so far between categorical variables, specifically between having a criminal record (yes or no), race (black or white), and receiving a positive response from employers (yes or no). Often we may be interested in looking at the impact of a factor on a numerical outcome. In the banbox object we have such an outcome measured by the researchers. The variable daystoresponse tells us how long it took the employers to provide a positive response. Let's look at this variable:
 
