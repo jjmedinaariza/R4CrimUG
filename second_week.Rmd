@@ -1,5 +1,5 @@
 ---
-title: "Second_Week"
+title: "Causality in randomised experiments"
 author: "Juanjo Medina (supplementing material produced as well by Reka Solymosi)"
 date: "11 January 2018"
 output:
@@ -26,25 +26,29 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In today's week we will refresh some of the themes you have explored in previous research methods courses. We are going to talk specifically about causality. This is one of the central concepts in empirical research. We often do research because we want to make causal inferences. We want to be in a position where we establish whether an intervention or a social process is causally linked to crime or some other relevant criminological outcome.
 
-Making causal inferences involves making comparisons to cases that have not being subject to the causal process we are trying to establish. But by your previous training, you should already know that not all kind of comparisons are the same. In the first semester we discussed the differeces between experimental and observational studies and we established how this different kinds of research designs have a bearing on your ability to make causal inference.
+Making causal inferences typically involves making comparisons between cases that have been subject to an intervention or that present some sort of attribute that we think may have a causal effect to cases that have not being subject to the causal process we are trying to establish. But by your previous training, you should already know that not all kind of comparisons are the same. In the first semester we discussed the differeces between experimental and observational studies and we established how this different kinds of research designs have a bearing on your ability to make causal inference.
 
-Let's think about a specific case. Is there discrimination against former offenders in the labor market? Or can we say that the fact that former offenders are less likely to be in employment may be due to other factors? Perhaps, they are less skilled. Perhaps they have less social capital, people they know that can help them to get jobs or to learn about job opportunities. Perhaps, they are less interested in finding employment and more in living "la vida loca". Clearly there may be many reasons why former offenders are less likely to find employment. So to simply compare former offenders with people that are not offenders and based on this comparison make inferences about discrimination in the labor market to be a factor would not be fair. If you want to compare, you want to compare former offenders with people that are similar to them in all the things that we know may matter for finding employment (e.g., education, social capital, etc.). Only in comparisons when other things are equal you can make causal inferences. How can you do that? How can you create situations when other things are equal? Well, that's what courses in research design are oriented to teach you. What is important for you to remember is that the way data are generated, the way you do your study, will, of course, affect the kind of interpretations that you make from your statistical comparisons.
+Let's think about a specific case so that this makes more sense. Is there discrimination against former offenders in the labor market? In other words, are offenders less likely to find employment after release because of prejudice among employers? Or can we say that the fact that former offenders are less likely to be in employment may be due to other factors? Perhaps, they are less skilled. Perhaps they have less social capital, people they know that can help them to get jobs or to learn about job opportunities. Perhaps, they are less interested in finding employment and more in [living "la vida loca"](https://www.youtube.com/watch?v=p47fEXGabaY). Only in comparisons when other things are equal you can make causal inferences. It would only be fair John, an ex-offender with a high school degree and X number of personal connections and Y numbers of professional experience, with Peter, a non-ex offender, with the same educational and profesisonal credentials than John (and everything else that matters when getting jobs also being equal between Peter and John. How can you do that? How can you create situations when other things are equal? Well, that's what courses in research design are oriented to teach you. What is important for you to remember is that the way data are generated, the way you do your study, will, of course, affect the kind of interpretations that you make from your statistical comparisons. And not all studies are created equal. Some research designs put you in a better position than others to make causal inference.
 
 You should have learnt by now that the ["bronze" standard](https://link.springer.com/article/10.1007/s11292-005-3538-2) for establishing causality in the social sciences is the randomized experiment. In a randomised trial, the researchers change the causal variable of interest for a group using something like a coin toss. As Angrist and Pischke (2015: xiii) highlight:
 
 *"By changing circumstances randomly, we make it highly likely that the variable of interest is unrelated to the many other factors determining the outcomes we mean to study... Random manipulation makes other things equal hold on average across the groups that did and did not experience manipulation"*
 
-Here we will look at data from a randomised trial that tried to establish whether there is discrimination in the labour market against former offenders. In doing so, we will also learn various functions used in R to read data, transform data, and to obtain summary statistics for groups. We will also introduce some plotting functions used in R to generate graphics.
+So, say you want to establish whether arresting a perpetrator may have a deterrent effect on subsequent domestic abuse. You could randomise, basically use the equivalent of a lottery, to decide whether the police officer is going to arrest the perpetrator or not and then compare those you arrest with those you don't arrest. Because you are randomising your treatment (the arrest) on average the treatment and the control group on the long run should be fairly similar and any differences you observe between them in the outcome of interest (domestic abuse recidivism) you could link it to your intervention -if you are interested in the answer to this you can read about it [here](http://niccsa.org/uploads/file/f815aa02a0804639a53bb4a800952235/EFFECTSOFARRESTONINTIMATEPARTNERVIOLENCE.pdf).
+
+In this session we will look at data from a randomised trial that tried to establish whether there is discrimination in the labour market against former offenders. In doing so, we will also learn various functions used in R to read data, transform data, and to obtain summary statistics for groups. We will also very quickly introduce a plotting function used in R to generate graphics.
 
 ## Getting data thanks to reproducibility
 
-Last week we introduced the notion of reproducible research and said that using and publishing code (particularly if using open source tools like R) is the way that many researchers around the world think that science ought to be done. This way of operating makes research more open, more credible, and more legitimate. It also means that we can more easily access the data used in published research. For this session we are going to use the data from [this](https://academic.oup.com/qje/article/133/1/191/4060073) and [this paper](https://pubs.aeaweb.org/doi/pdfplus/10.1257/aer.p20171003). In this research project, the authors tried to answer the question of whether criminal antecendents and other personal characteristics have an impact on access to employment.
+Last week we introduced the notion of reproducible research and said that using and publishing code (particularly if using open source tools like R) is the way that [many researchers](https://osf.io/?gclid=EAIaIQobChMIq-jM6MuY2QIV7Z3tCh04vAycEAAYASAAEgLptPD_BwE) around the world think that science ought to be done. This way of operating makes research more open, more credible, and more legitimate. It also means that we can more easily access the data used in published research. For this session we are going to use the data from [this](https://academic.oup.com/qje/article/133/1/191/4060073) and [this paper](https://pubs.aeaweb.org/doi/pdfplus/10.1257/aer.p20171003). In this research project, the authors tried to answer the question of whether criminal antecendents and other personal characteristics have an impact on access to employment.
 
-Amanda Agan and Sonja Starr develop an experiment in which they created 15,220 fake resumes randomly generating these critical characteristics (such as having a criminal record) and used these resumes to send onlin job applications to low-skill, entry level job openings in New Jersey and New York City. All the fictious applicants were male and about 21 to 22 years old. Because they conform to reproducibly standards we can access this data from the *Harvard Dataverse* (a repositoty for open research data). Click [here](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VPHMNT) to locate the data.
+[Amanda Agan](http://economics.rutgers.edu/people/626-amanda-agan) and [Sonja Starr](https://www.law.umich.edu/FacultyBio/Pages/FacultyBio.aspx?FacID=sbstarr) developed a randomised experiment in which they created 15,220 fake resumes randomly generating these critical characteristics (such as having a criminal record) and used these resumes to send online job applications to low-skill, entry level job openings in New Jersey and New York City. All the fictious applicants were male and about 21 to 22 years old. These kind of experiments are very common among researchers that want to explore through these "audits" whether some personal characteristics are discriminated against in the labor market.
+
+Because Amanda Agan and Sonja Starr conform to reproducibly standards we can access this data from the *Harvard Dataverse* (a repositoty for open research data). Click [here](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/VPHMNT) to locate the data.
 
 ![Figure 1](second_wk_imgs/harvarddataverse.PNG) 
 
-In this page you can see a download section and some files that can be accessed. One of them contains analytical code pertaning to the study and the other contains the data. You also see a link called **metadata**. Metadata is data about data, it simply provides you with some information about the data. If you clink in metadata you will see at the bottom a reference to the software the authors used (STATA). So we know these files are in STATA proprietary format. Let's download the data file and then read the data into R.
+In this page you can see a download section and some files that can be accessed. One of them contains analytical code pertaning to the study and the other contains the data. You also see a link called **metadata**. Metadata is data about data, it simply provides you with some information about the data. If you clink in metadata you will see at the bottom a reference to the software the authors used (STATA). So we know these files are in [STATA](https://www.stata.com/) proprietary format. Let's download the data file and then read the data into R.
 
 You could just click download and then place the file in your project directory. Alternatively, and preferably, you may want to use code to make your whole work more reproducible. Think of it this way, every time you click or use drop down menus you are doing things that others cannot reproduce because there won't be a written record of your steps. You will need though to do some clicking for finding out the required url you will use for writing your code. The file we want is the AganStarrQJEData.dta. Click in the name of this file. You will be taken to another webpage. On it you will see the download url. Copy and paste this url in your code below.
 
@@ -67,31 +71,30 @@ You should now have a new object in your global environment. Check the dimension
 *HOMEWORK 1:*
 
 *Answer all the following questions (you will need to refer to the original articles to answer these questions):*
-*-How many observations does this file has? Is this consistent with the description provided in the articles? Can you account for any differences?* 
-*-What does the variable crimebox and crime measure?* 
-*-What is the name of the variable measuring race?* 
-*-What proportion of cases in the dataset have a criminal record?*
+ *-How many observations does this file has? Is this consistent with the description provided in the articles? Can you account for any differences?* 
+ *-What does the variable crimebox and crime measure?* 
+ *-What is the name of the variable measuring race?* 
 
 ## Getting a sense for your data
 
-What is the first thing you need to ask yourself when you look at a dataset. Data are often too big to look at the whole thing. It is almost always impossible to eyeball the entire dataset and see what you have in terms of interesting patterns or potential problems. It is often a case of information overload and we want to be able to extract what is relevant and important about it. But where do you start?  [Here](http://rex-analytics.com/data-analysis-questions-to-ask-the-first-time/) you can find a brief but very useful overview put together by Steph de Silva. Read it before we carry on.
+What is the first thing you need to ask yourself when you look at a dataset? Data are often too big to look at the whole thing. It is almost always impossible to eyeball the entire dataset and see what you have in terms of interesting patterns or potential problems. It is often a case of information overload and we want to be able to extract what is relevant and important about it. But where do you start?  [Here](http://rex-analytics.com/data-analysis-questions-to-ask-the-first-time/) you can find a brief but very useful overview put together by Steph de Silva. Read it before we carry on.
 
-![First questions to your data](second_session_imgs/firstlookatdata.jpg)
+![Figure 2](second_session_imgs/firstlookatdata.jpg)
 
 As Mara Averick (somebody you want to follow at twitter if you want to be in top of R related resources) suggests:
 
-![Dating tips?](second_session_imgs/relationships.png)
+![Figure 3](second_session_imgs/relationships.png)
 
 Here we are going to introduce a few functions that will help you to start making sense for what you have just downloaded. Summarising the data is the first step in any analysis and it is also used for finding out potential problems with the data. Regarding the latter you want to look out for: missing values; values outside the expected range (e.g., someone aged 200 years); values that seem to be in the wrong units; mislabelled variables; or variables that seem to be the wrong class (e.g., a quantitative variable encoded as a factor). Lets start by the basic things you always look first in a datasets. 
 
-You can see in the Environment window that csew has 14813 observations (rows) of 62 variables (columns). You can also obtain this information using code. Here you want the  **DIM**ensions of the dataframe (the number of rows and columns) so you use the `dim()` function:
+You can see in the Environment window that banbox has 14813 observations (rows) of 62 variables (columns). You can also obtain this information using code. Here you want the  **DIM**ensions of the dataframe (the number of rows and columns) so you use the `dim()` function:
 
 ```{r}
 dim(banbox)
 
 ```
 
-Looking at this information will help you to diagnose whether there was any trouble getting your data into R (e.g., imagine you know there should be more cases or more variable). You may also want to have a look at the names of the columns using the `names()` function. We will see the names of the variables.
+Looking at this information will help you to diagnose whether there was any trouble getting your data into R (e.g., imagine you know there should be more cases or more variables). You may also want to have a look at the names of the columns using the `names()` function. We will see the names of the variables.
 
 ```{r}
 names(banbox)
@@ -119,10 +122,10 @@ class(banbox$num_stores)
 
 We talked about numeric vectors in week one. It is simply a collection of numbers. But what is a labelled vector? This is a new type of vector introduced by the *haven* package. Labelled vectors are categorical variables that have labels. Go to the *Environment* panel and left click in the banbox object. This should open the data browser in the top left quadrant of RStudio.
 
-![Data view](second_wk_imgs/dataview.png)
+![Figure 4](second_wk_imgs/dataview.png)
 
 
-If you look carefully you will see that the various columns that include categorical variables only contain numbers. In many statistical environments, such as STATA or SPSS, this is a common standard. The variables have a numeric value for each observation and then each of these numeric values is associated with a label. This kind of made sense when computer memory was an issue - for this was an efficient way of saving resources. These days it makes perhaps less sense. But labelled vectos give you a chance to reproduce data from other statistical environments without losing any fidelity in the import process. See what happens if we try to summarise this labelled vector. We will use the *table()* to provide a count of observations on the various valid values of the *sex* variable. It is a function to obtain your frequency distribution.
+If you look carefully you will see that the various columns that include categorical variables only contain numbers. In many statistical environments, such as STATA or SPSS, this is a common standard. The variables have a numeric value for each observation and then each of these numeric values is associated with a label. This kind of made sense when computer memory was an issue - for this was an efficient way of saving resources. These days it makes perhaps less sense. But labelled vectors give you a chance to reproduce data from other statistical environments without losing any fidelity in the import process. See what happens if we try to summarise this labelled vector. We will use the *table()* to provide a count of observations on the various valid values of the *sex* variable. It is a function to obtain your frequency distribution.
 
 ```{r}
 table(banbox$crime)
@@ -136,11 +139,11 @@ attributes(banbox$crime)
 
 So this object has different compartments. The first one is called label and it provides a description of what the variable measures. This is what you saw in the RStudio data viewer earlier. The second compartment explains the original format in which it was. The third one identifies the class of the vector. Whereas the final one *labels* provides the labels that allows us to identify what the meaning of 0 and 1 mean in this context.
 
-Last week we said that many R functions expects factors when you have categorical data, so typically after you import data into R you may want to coerce your labelled vectors into factors. To do that you need to use the *as_factor()* function. Let's see how we do that.
+Last week we said that many R functions expect factors when you have categorical data, so typically after you import data into R you may want to coerce your labelled vectors into factors. To do that you need to use the *as_factor()* function. Let's see how we do that.
 
 ```{r}
-#This code asks R to create a new column in your csew tibble that is going to be 
-#called sex_f. Typically, when you alter variables you can to create a new one so
+#This code asks R to create a new column in your banbox tibble that is going to be 
+#called crime_f. Typically, when you alter variables you can to create a new one so
 #that the original gets preserved in case you do something wrong. Then we use the
 #as_factor() function to explain to R that what we want to do is to get the original
 #sex variable and mutate it into a factor, this resulting factor is what will be stored
@@ -168,7 +171,7 @@ Which is:
 lapply(banbox, class)
 ```
 
-As you can see many variables are classed as labelled. This is common with survey data. Many of the questions in social surveys measure the answers as categorical variables (e.g., these are nominal or ordinal level measures). In fact, with this dataset there are many variables that are encoded as numeric that really aren't. Welcome to real world data, where things can be a bit messy and need tidying.
+As you can see many variables are classed as labelled. This is common with survey data. Many of the questions in social surveys measure the answers as categorical variables (e.g., these are nominal or ordinal level measures). In fact, with this dataset there are many variables that are encoded as numeric that really aren't. Welcome to real world data, where things can be a bit messy and need tidying!
 
 See for example the variable black:
 
@@ -201,21 +204,21 @@ table(banbox$black_f)
 
 This gives you an idea of the kind of transformations you often want to perform to make your data more useful for your purposes. But let's keep looking at functions you can use to explore your dataset. 
 
-You can, for example, use the `head()` function if you just want to visualise the values for the first few cases in your dataset. The next code for example ask for the values for the first two cases.
+You can, for example, use the `head()` function if you just want to visualise the values for the first few cases in your dataset. The next code for example ask for the values for the first two cases. If you want a different number to be shown you just need to change the number you are passing as an argument.
 
-```{r}
+```{r, eval=FALSE}
 head(banbox, 2)
 ```
 
 In the same way you could look at the last two cases in your dataset using `tail()`:
 
-```{r}
+```{r, eval=FALSE}
 tail(banbox, 2)
 ```
 
-It is good practice to do this to ensure R has read the data correctly and there's nothing terribly wrong with your dataset. If you have access to STATA you can open the original file in STATA and check if there are any discrepancies, for example. It can also give you a first impression for what the data looks like.
+It is good practice to do this to ensure R has read the data correctly and there's nothing terribly wrong with your dataset. If you have access to STATA you can open the original file in STATA and check if there are any discrepancies, for example. Glimpsing your data in this way can also give you a first impression for what the data looks like.
 
-One thing you may also want to do is to see if there are any **missing values**. For that we can use the `is.na()` function. Missing values in R are coded as NA. The code below, for example, asks for NA values for the variable *antisocx* in the *csew* object for observations 1 to 10:
+One thing you may also want to do is to see if there are any **missing values**. For that we can use the `is.na()` function. Missing values in R are coded as NA. The code below, for example, asks for NA values for the variable *response_black* in the *banbox* object for observations 1 to 10:
 
 ```{r}
 is.na(banbox$response_black[1:10])
@@ -246,7 +249,7 @@ There is a whole field of statistics devoted to doing analysis when missing data
 
 The data analysis workflow has a number of stages. The diagram below (produced by Hadley Wickham) is a nice illustration of this process:
 
-![Data analysis process](second_session_imgs/data-science-explore.png)
+![Figure 5](second_session_imgs/data-science-explore.png)
 
 We have started to see different ways of bringing data into R. And we have also started to see how we can explore our data. It is now time we start discussing one of the following stages, **transform**. A good deal of time and effort in data analysis is devoted to this. You get your data and then you have to do some transformations to it so that you can answer the questions you want to address in your research.
 
@@ -269,7 +272,7 @@ Now let's load the package:
 library(dplyr)
 ```
 
-Notice that when you run this package you get a series of warnings. One the things with a language like R is that sometimes packages introduce functions that have the same name than others that are already loaded into your session. When that happens the newly loaded ones will over-ride the previous ones. You can still use them but you will have to refer to them explicitly. Otherwise R will assume you are using the function most recently loaded:
+Notice that when you run this package you get a series of warnings. It is telling us that some functions from certain packages are being "masked". One the things with a language like R is that sometimes packages introduce functions that have the same name than others that are already loaded into your session. When that happens the newly loaded ones will over-ride the previous ones. You can still use them but you will have to refer to them explicitly. Otherwise R will assume you are using the function most recently loaded:
 
 ```{r, eval=FALSE}
 #Example:
@@ -280,9 +283,11 @@ stats::filter()
 
 ## Using dplyr single verbs
 
-One of the first operations you may want to carry out is to subset the dataframe based on values of particular variables. Say we want to replicate the results reported by Agan and Starr in 2017. In this earlier paper, these researchers only used data  from the period prior to the introduction of Ban the Box legislation and only used data from businesses that ask about criminal records in their online applications. How can we recreate this dataset?
+One of the first operations you may want to carry out when working with dataframes is to subset them based on values of particular variables. Say we want to replicate the results reported by Agan and Starr in 2017. In this earlier paper, these researchers only used data  from the period prior to the introduction of Ban the Box legislation and only used data from businesses that asked about criminal records in their online applications. How can we recreate this dataset?
 
-For this kind of operations we use the *filter()* function. Like all single verbs in dplyr, the first argument is the tibble (or data frame). The second and subsequent arguments refer to variables within that data frame, selecting rows where the expression is TRUE. Ok, so if we look at the dataset we can see that there is a variable called crimbox that identifies applications that require information about criminal antecedents and there is a variable called pre that identifies whether the application was sent before the legislation was introduced. In this dataset the value 1 is being used to denote positive responses. So, if we want to create the 2017 dataset we would start by selecting only data where the value in these two variables equals 1.
+For this kind of operations we use the *filter()* function. Like all single verbs in dplyr, the first argument is the tibble (or data frame). The second and subsequent arguments refer to variables within that data frame, selecting rows where the expression is TRUE. 
+
+Ok, so if we look at the dataset we can see that there is a variable called crimbox that identifies applications that require information about criminal antecedents and there is a variable called pre that identifies whether the application was sent before the legislation was introduced. In this dataset the value 1 is being used to denote positive responses. So, if we want to create the 2017 dataset we would start by selecting only data where the value in these two variables equals 1.
 
 ```{r}
 #We will store the results of filtering the data in a new object that I am calling aer (short for the name of the journal in which the paper was published)
@@ -295,15 +300,15 @@ Notice that the number of cases equals the number of cases reported by the autho
 
 You may have noticed in the code above that I wrote "=="" instead of "=". Logical operators in R are not written exactly the same way than in normal practice. Keep this in mind when you get error messages from running your code. Often the source of your error may be that you are writing the logical operators the wrong way (as far as R is concerned). Look [here](https://www.statmethods.net/management/operators.html) for valid logic operators in R.
 
-Sometimes you may want to select only a few variables. Earlier we said than real life data may have hundreds of variables and only a few of those may be relevant for your analysis. Say you only want crime, ged (a ged is a high school equivalence diploma rather than a proper high school diploma and is sometimes seen as inferior), empgap (a gap year on employment), black_f, response, and daystoresponse from this dataset. For this kind of operations you use the *select()* function.
+Sometimes you may want to select only a few variables. Earlier we said than real life data may have hundreds of variables and only a few of those may be relevant for your analysis. Say you only want "crime", "ged" (a ged is a high school equivalence diploma rather than a proper high school diploma and is sometimes seen as inferior), "empgap" (a gap year on employment), "black_f", "response", and "daystoresponse" from this dataset. For this kind of operations you use the *select()* function.
 
-The syntax of this funciton is easy. First we name the dataframe object (aer2017) and then we list the variables. The order in which we list the variables within the select function will determine the order in which those columns appear in the new dataframe we are creating. Since I am pretty confident I am not making a mistake I will transform the original aer2017 tibble rather than creating an entirely new object.
+The syntax of this funciton is easy. First we name the dataframe object (aer2017) and then we list the variables. The order in which we list the variables within the select function will determine the order in which those columns appear in the new dataframe we are creating. So this is a handy function to use if you want to change the order of your columns for some reason. Since I am pretty confident I am not making a mistake I will transform the original "aer2017" tibble rather than creating an entirely new object.
 
 ```{r}
 aer2017 <- select(aer2017, crime, ged, empgap, black_f, response, daystoresponse)
 ```
 
-If you now look at the global environment you will see that the aer2017 tibble has reduced in size and now only has 6 columns. If you view the data you will see these are the 6 variables we selected.
+If you now look at the global environment you will see that the "aer2017" tibble has reduced in size and now only has 6 columns. If you view the data you will see these are the 6 variables we selected.
 
 ## Using dplyr for grouped operations
 
@@ -311,7 +316,7 @@ So far we have used dplyr sinle verbs for ungrouped operations. But we can also 
 
 ```{r}
 
-#First we group the observations by criminal record in a new object, by using as_factor here the results will be labelled later on. Keep in mind we are using as_factor because the column crime is a labelled vector rather than a factor or a character vector, and we do this to aid interpretation (it is easier to interpret labels than 0 and 1).
+#First we group the observations by criminal record in a new object, by using as_factor in the call to the crime variable the results will be labelled later on (even though we are not changing the crime variable in the aer2017 dataframe. Keep in mind we are using as_factor because the column crime is a labelled vector rather than a factor or a character vector, and we do this to aid interpretation (it is easier to interpret labels than 0 and 1).
 by_antecedents <- group_by(aer2017, as_factor(crime))
 #Then we run the summarise function to provide some useful summaries of the
 #groups we are using: the number of cases and the mean of the response variable
@@ -322,12 +327,12 @@ results <- summarise(by_antecedents,
 results
 ```
 
-Let's look at the code in the summarise function. First we are asking R to place the results in an object we are calling results. Then we are specifying that we want to group the data in the way we specified in our group_by() function, that is by criminal record. Then we pass two arguments. Each of these arguments is creating a new variable in the resulting object called "results". The first variable we are creating is called *count* by saying this equals n() we are specifying to R that this new variable simply counts the number of cases in each of the grouping categories. The second variable we are creating is called *outcome* and to compute this variable we are asking R to compute the mean of the variable response for each of the two groups of applicants (those with records, those without). Remember that the variable response in the aer2017 dataframe was coded as numeric variable, even though in truth is categorical in nature (there was a response, or not, from the employers). It doesn't really matter. Taking the mean of a binary variable in this case is mathematically equivalent to computing a proportion.
+Let's look at the code in the summarise function. First we are asking R to place the results in an object we are calling results. Then we are specifying that we want to group the data in the way we specified in our group_by() function, that is by criminal record. Then we pass two arguments. Each of these arguments is creating a new variable in the resulting object called "results". The first variable we are creating is called *count* by saying this equals n() we are specifying to R that this new variable simply counts the number of cases in each of the grouping categories. The second variable we are creating is called *outcome* and to compute this variable we are asking R to compute the mean of the variable response for each of the two groups of applicants (those with records, those without). Remember that the variable response in the "aer2017" dataframe was coded as numeric variable, even though in truth is categorical in nature (there was a response, or not, from the employers). It doesn't really matter. Taking the mean of a binary variable in this case is mathematically equivalent to computing a proportion as we discussed earlier.
 
-So, what we see here is that about 13.6% of applicants with no criminal record received a positive response from the employers, whereas only 8% of those with criminal records did receive such a response. Given that the asignation of a criminal record was randomised to the applicants, there's a pretty good chance that no other confounders are influencing this outcome. And that is the beauty of randomised experiments. You may be in a position to make stronger claims about your results.
+So, what we see here is that about 13.6% of applicants with no criminal record received a positive response from the employers, whereas only 8% of those with criminal records did receive such a response. Given that the asignation of a criminal record was randomised to the applicants, there's a pretty good chance that no other [**confounders**](https://en.wikipedia.org/wiki/Confounding) are influencing this outcome. And that is the beauty of randomised experiments. You may be in a position to make stronger claims about your results.
 
 *HOMEWORK 2:*
-*Use what we have learned so far to see if there is an interaction effect between race and criminal records. That is, what would happen if we compare 4 groups whites with no records, whites with records, blacks with no records, and blacks with records. Make sure you copy and paste not only your results but also your code (only the bit relevant for answering this question) in your answer. What do you think? Is there an interaction effect? In other words, is the impact of having a criminal record more accentuated for either of the two racial groups? Once you have obtained an answer using the "response" variable as an outcome try to establish whether using a different outcome ("daystoresponse"") changes your interpretation*
+*Use what we have learned so far to see if there is an interaction effect between race and criminal records. That is, what would happen if we compare 4 groups whites with no records, whites with records, blacks with no records, and blacks with records. Make sure you copy and paste not only your results but also your code (only the bit relevant for answering this question) in your answer. What do you think? Is there an interaction effect? In other words, is the impact of having a criminal record more accentuated for either of the two racial groups?* 
 
 ```{r, eval=FALSE, echo=FALSE}
 by_recrace <- group_by(aer2017, as_factor(crime), black_f)
@@ -348,7 +353,7 @@ We have been looking at relationships so far between categorical variables, spec
 summary(banbox$daystoresponse)
 ```
 
-The summary() function provides some useful stats for numerical variables. We obtain the minimum and maximum value, the 25th percentile, the median, the mean, the 75th percentile, and the number of missing data (NA). You can see the number of missing data here is massive. Most cases have missing data on this variable. Clearly this is a function of, first and foremost, the fact that the number of days to receive a positive response will only be collected in cases where there was a positive response. But even accounting for that, it is clear that this information is also missing in many cases that receive a positive response. So we given this, we need to be very careful when interpreting this variable. Yet, because it is the only numeric variable here we will use it to show some handy functions.
+The summary() function provides some useful stats for numerical variables. We obtain the minimum and maximum value, the 25th percentile, the median, the mean, the 75th percentile, and the number of missing data (NA). You can see the number of missing data here is massive. Most cases have missing data on this variable. Clearly this is a function of, first and foremost, the fact that the number of days to receive a positive response will only be collected in cases where there was a positive response. But even accounting for that, it is clear that this information is also missing in many cases that received a positive response. So we given this, we need to be very careful when interpreting this variable. Yet, because it is the only numeric variable here we will use it to show some handy functions.
 
 
 We could do as before and get results by groups. Let's look at the impact of race on days to response:
@@ -369,3 +374,13 @@ ggplot(banbox, aes(y = daystoresponse, x = black_f)) +
 ```
 
 Watch [this video](https://www.khanacademy.org/math/probability/data-distributions-a1/box--whisker-plots-a1/v/reading-box-and-whisker-plots) and see if you can interpret the results portrayed here. What do you think?
+
+*Homework 3: For this course unit you need to write a coursework assignment in which you will use data from a social survey to explore relationships between various variables.*
+
+*Specifically, you will be allowed to use. So you will need to pick one of them and then select a topic (of those listed below) to explore with each of these surveys:*
+*- The 2010 wave of the European Social Survey, which you can access [here](http://www.europeansocialsurvey.org/data/download.html?r=5) and explore [here](http://nesstar.ess.nsd.uib.no/webview/). From this dataset you will be able to explore one of these two topics: "worry about crime" and "attitudes toward punishment".*
+*- The 2013-2014 Crime Survey for England and Wales (the Teaching Dataset version) which you can access [here](https://discover.ukdataservice.ac.uk/catalogue/?sn=7911&type=Data%20catalogue) or explore [here](http://nesstar.ukdataservice.ac.uk/webview/). From this dataset you will need to focus on one of two topics "fairness of the criminal justice" or "perceptions of antisocial behaviour".*
+
+**As part of this week homework you need to let us know which survey and which topic you want to focus on for your coursework assignment**. *Think about which of these topics appeals the most to you when making your decision*.
+
+*You can explore the datasets and what other variables are available. For your coursework you will need to identify other variables in these surveys that you think may be associated or helpful to understand why people vary in worry of crime, attitudes toward punishment, etc. At this point you don't need to identify those other variables, but you may find it useful to explore what's available in those datasets using NESSTAR (a guide for how to use NESSTAR is available [here](http://nesstar.com/help/4.0/webview/getting-started/getting-to-know-nesstar-webview.html))and the existing documentation for those studies*
