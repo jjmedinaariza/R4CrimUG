@@ -125,7 +125,7 @@ We talked about numeric vectors in week one. It is simply a collection of number
 ![Figure 4](second_wk_imgs/dataview.png)
 
 
-If you look carefully you will see that the various columns that include categorical variables only contain numbers. In many statistical environments, such as STATA or SPSS, this is a common standard. The variables have a numeric value for each observation and then each of these numeric values is associated with a label. This kind of made sense when computer memory was an issue - for this was an efficient way of saving resources. These days it makes perhaps less sense. But labelled vectors give you a chance to reproduce data from other statistical environments without losing any fidelity in the import process. See what happens if we try to summarise this labelled vector. We will use the *table()* to provide a count of observations on the various valid values of the *sex* variable. It is a function to obtain your frequency distribution.
+If you look carefully you will see that the various columns that include categorical variables only contain numbers. In many statistical environments, such as STATA or SPSS, this is a common standard. The variables have a numeric value for each observation and then each of these numeric values is associated with a label. This kind of made sense when computer memory was an issue - for this was an efficient way of saving resources. These days it makes perhaps less sense. But labelled vectors give you a chance to reproduce data from other statistical environments without losing any fidelity in the import process. See what happens if we try to summarise this labelled vector. We will use the *table()* to provide a count of observations on the various valid values of the *crime* variable. It is a function to obtain your frequency distribution.
 
 ```{r}
 table(banbox$crime)
@@ -146,12 +146,12 @@ Last week we said that many R functions expect factors when you have categorical
 #called crime_f. Typically, when you alter variables you can to create a new one so
 #that the original gets preserved in case you do something wrong. Then we use the
 #as_factor() function to explain to R that what we want to do is to get the original
-#sex variable and mutate it into a factor, this resulting factor is what will be stored
+#crime variable and mutate it into a factor, this resulting factor is what will be stored
 #in the new column.
 banbox$crime_f <- as_factor(banbox$crime)
 ```
 
-You will see now that you have 63 variables in your dataset, look at the environment to check. Let's explore the new variable we have created (you can also look for the new variable in the data browser and see how it looks different to the original sex variable):
+You will see now that you have 63 variables in your dataset, look at the environment to check. Let's explore the new variable we have created (you can also look for the new variable in the data browser and see how it looks different to the original crime variable):
 
 ```{r}
 class(banbox$crime_f)
