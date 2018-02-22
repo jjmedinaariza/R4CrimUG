@@ -1,0 +1,125 @@
+---
+title: "Feedback for Week 3 Homework"
+author: "Juanjo Medina"
+date: "22 February 2018"
+output: slidy_presentation
+---
+
+## Start session reading data and packages
+
+```{r cars, echo = TRUE}
+library(ggplot2)
+
+ncovr <- read.csv("NAT.csv")
+```
+
+## Faceting
+
+```{r pressure}
+ggplot(data = ncovr, aes(x = HR90)) + 
+  geom_histogram() + 
+  facet_wrap(~SOUTH)
+```
+
+##Boxplots
+
+```{r}
+ggplot(data = ncovr,
+       aes(x = as.factor(SOUTH), y = HR90)) + 
+  geom_boxplot()
+```
+
+##Histograms
+
+```{r}
+ggplot(ncovr, aes(x = HR90, fill = as.factor(SOUTH))) +
+  geom_histogram(position = "identity", alpha = 0.4)
+```
+
+##Using the logarithmic scale
+
+```{r}
+ggplot(ncovr, aes(x = log10(HR90+1), fill = as.factor(SOUTH))) +
+  geom_histogram(position = "identity", alpha = 0.4)
+```
+
+##Density plots
+
+```{r}
+ggplot(ncovr, aes(x = log10(HR90 + 1), fill = as.factor(SOUTH))) + 
+  geom_density(alpha = .3)
+```
+
+##Violint plots
+
+```{r}
+ggplot(data = ncovr,
+       aes(x = as.factor(SOUTH), y = log10(HR90+1))) + 
+  geom_violin() 
+```
+
+For details see: Hintze, J. L., Nelson, R. D. (1998) Violin Plots: A Box Plot-Density Trace Synergism. The American Statistician 52, 181-184
+
+##Show me the points
+
+```{r}
+ggplot(data = ncovr,
+       aes(x = as.factor(SOUTH), y = log10(HR90+1))) + 
+  geom_violin() +
+  geom_jitter(width = 0.2, alpha = 0.2)
+```
+
+##Adjusting properties of the violins
+
+```{r}
+ggplot(data = ncovr,
+       aes(x = as.factor(SOUTH), y = log10(HR90+1))) + 
+  geom_violin(scale="count") +
+  geom_jitter(width = 0.2, alpha = 0.2)
+
+```
+
+```{r}
+table(ncovr$SOUTH)
+```
+
+##Scatterplots
+
+```{r}
+ggplot(ncovr, aes(x = UE70, y = HR70)) +
+  geom_point(alpha=.4) +
+  geom_smooth(colour="red", size=1, se=FALSE)
+```
+
+##Conditioning on a third variable
+
+```{r}
+ggplot(ncovr, aes(x = UE70, y = HR70, colour= as.factor(SOUTH))) +
+  geom_point(alpha=.1) +
+  geom_smooth(size=1.2, se=FALSE)
+```
+
+##Only scratching the surface
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+library(sf)
+library(tmap)
+shp_name <- "ncovr/NAT.shp"
+ncovr_map <- st_read(shp_name)
+```
+
+
+```{r}
+tm_shape(ncovr_map) + 
+  tm_fill("HR70", title = "Homicide Rate 1990", style="quantile", palette= "Reds") +
+  tm_borders(alpha = 0.1) +
+  tm_layout(legend.position = c("left", "bottom"), legend.title.size = 0.8)
+```
+
+
+##Further resources
+
+-Hadley Wickham ggplot2 page: http://ggplot2.tidyverse.org/index.html
+
+-Kieran Helay book: http://socviz.co
+
