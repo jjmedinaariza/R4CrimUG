@@ -3,6 +3,7 @@ library(haven)
 library(dplyr)
 library(ggplot2)
 library(mosaic)
+library(haven)
 
 #Get data
 data_url <- "https://dataverse.harvard.edu/api/access/datafile/3036350"
