@@ -1,0 +1,158 @@
+---
+title: "Getting your data ready for the coursework"
+author: "Juanjo Medina"
+date: "5 March 2018"
+output: html_document
+---
+
+##Example
+
+In the videos that you can obtain in Blackboard we have discussed the overall task of the coursework assignment and where to find the detail for it, the NESSTAR interface as a way to explore the variables available in your dataset, and also how to read the download and read the data into R.
+
+In these notes I am just going to illustratte some of the things you may have to do in order to carry out the analysis required for your project. Once you have the data in R you wil need to:
+-Have a first look at the data (explore the class of the variables you are using and run frequency distributions). This will give you a better sense for what the next steps should be.
+-Do any required transformations. This may vary in nature. But I will give you some examples in this handout.
+-Start exploring the association between your dependent or outcome variable and the explanatory variables that you have tentatively selected. You should start doing this using visualisaitons. Then you may want to run some inferential statistical tests. We have not yet exhausted the explanation of tests for exploring relationships between pair of variables, so it is unlikely you will be able to complete this until we cover these tests next week.
+-Start thinking about your regression model. We haven't even introduced the notion of what a regression model is. So you will only be able to do this once we get to that.
+
+##A first look at the data
+
+I am going to use the CSEW as an example but the process would be exactly the same if you were to use the ESS. Let's say that I am interested in modelling confidence in the capacity of the police to catch offenders. This is not a topic you can explore with the CSEW, which is way I am using it so that you don't simply cut and paste for your assigment!!!
+
+For sake of simplicy I will select 5 explanatory variables that will be helpful for me to illustrate particular kind of issues that you may come across in your coursework.
+
+```{r}
+library(haven)
+library(dplyr)
+library(ggplot2)
+csew <- read_dta("UKDA-7911-stata11/stata11/csew1314_teaching_eul2.dta")
+csew <- select(csew, sex, age, edeprivex, cjspolb, bcsvictim)
+```
+
+Ok, so I have selected sex, age, a measure of deprivation in the area where the respondent lives (edeprives), cjspolb (a question that measures confidence in the police at catching criminals), and bcsvictim (a measure of victimisation).
+
+Next I would want to check the class of the variables;
+
+```{r}
+class(csew$sex)
+class(csew$age)
+class(csew$edeprivex)
+class(csew$cjspolb)
+class(csew$bcsvictim)
+```
+
+This early part of your analysis is closely related to stuff we cover in the second lab. So, if the results of running those functions are not clear or you don't know what class of a vector is you need to look at week 2 and possibly week 1 notes.
+
+Let's have a look at the frequency distribution for these variables. Now, because they are mostly labelled vectors if we use the table() function on them we will get results that won't be too clear to us.
+
+```{r}
+table(csew$sex)
+```
+
+Ok, so we have 16716 ones and 19195 twos. But what does that mean? Well, you need to look atthe codebook that you downloaded and I showed in the video if you are using the CSEW to know what the 1 and 2 mean here. If you are using the ESS you will need to open up NESSTAR and look at the variable in question to figure out the meaning of those numbers. Alternatively we can ask R to treat these labelled categorical variables as factors.
+
+```{r}
+table(as_factor(csew$sex))
+```
+
+Much better. We now can also clearly establish this is a categorical unordered variable with two levels (if you don't know what this means, you may need to check the materials from the first semester discussing different type of variables). Making a note of the level of measurement for each of your variables will be neeed since this will determine how you treat them in your visualisations and statistical tests.
+
+Now, you would need to do this for each of your variables. This first variable doesn't seem to be causing us any trouble. Actually, before we conclude that, let's check for missing values.
+
+```{r}
+sum(is.na(csew$sex))
+```
+
+Great. All observations in the dataset have a valid value for this variable.
+
+Let's carry on.
+
+```{r}
+table(as_factor(csew$bcsvictim))
+sum(is.na(csew$bcsvictim))
+```
+
+Smashing. Categorical unordered with two levels and no missing data.
+
+```{r}
+table(as_factor(csew$cjspolb))
+sum(is.na(csew$cjspolb))
+```
+
+Allright, so here we have a categorical ordered variable. Answers range from not at all confident to very confident. We also know that 2 people refused to answer the question and that 504 people didn't know how to answer it. So we have some missing data. Those two levels are equivalent to NA because we don't really know their opinion. But wait... when we sum up all the NAs in this variable we get 17138. What's going on here?
+
+All NA data has one thing in common is NA. It means we don't know what the particular respondent thinks about the police. But as we can see there may be different sources of NA. Here we have at least three:
+-First we have 2 respondents that refused
+-Then we have 504 that couldn't figure out their answer
+-And then we have these misterious 17138 that we don't know where they are coming from.
+
+Just to kill the suspense let me explain why you have so many missing cases here. Those 17138 cases are people that were not even asked this question. Complex surveys like the CSEW do not ask all questions to all respondents. Sometimes that happens because of filtering instructions in the questionnaires. For example, there is no point asking someone if they reported their victimisation to the police if they did not experience any victimisation. Sometimes, at it is the case here, survey designers try to get do surveys that gather as much information as possible at a fracion of the cost. Running victim surveys is expensive because victimisation is very rare, so you need very large samples. However, for meauring public opinions nationally you can be absolutely fine with samples of 2000 people or even less.
+
+So, the designers of the CSEW break down the questionaire into different modules. Some, for which large samples are needed are administered to the whole sample, others for which there is less of a need for a large sample, are administered only to a subset of the sample. The CSEW main sample is randomly split into subsamples and different modules are administered to these subsamples (apart from the general ones that are administered to everybody). The questions on confidence to the police are only asked to respondents in some of these subamples and that's what's going on here. You would find out this stuff from looking at the technical documentation of the CSEW (you will need to look at this documentation anyhow) but I wanted to give you a heads up on some of the issues you will encounter.
+
+So, if you use this variable, you know that all your analysis will be restricted to only the subsample to which this question was posed. We could, therefore, as well, filter all the irrelevant cases then before we carry on. These categorical variables are better treated as factors so I am going to also create a factor version of it.
+
+```{r}
+csew$cjspolb_f <- as_factor(csew$cjspolb)
+table(csew$cjspolb_f)
+csew <-filter(csew, !is.na(cjspolb_f))
+```
+
+Notice how now we have a dataframe of 18233. Given we are using a question that only applies to a subsample this is the subsample we can work with.
+
+NA data is a problem in data analysis because if we have a lot of missing data in a variable it means that our inferences about what the population thinks or experience may be way off (if for example the people that did not answer are very different from those that refused or didn't know how to answer). In this case you don't need to worry about that kind of bias with this variable too much. You only have 2 + 504 people *from the relevant subsample* for which you don't know the answers. This is a smallish proportion of this subsample. But if this proportion was to be much bigger you would have a problem. 
+
+Recode into NA... and remove the labels
+
+Ok, so two to go.
+
+```{r}
+class(csew$edeprivex)
+table(csew$edeprivex)
+```
+
+This variable shows up as numeric. But it is not quite so. The English Index of Deprivation measures all neighborhoods in England and gives them a score based on how deprived they are. If you look at the codebook for the CSEW you will see that's not quite what you have here. If you had the exact score for deprivation for each of the respondents in the survey you could possibly track them down. In order to avoid this, the CSEW groups these scores in 5 quintiles. So the vale of one corresponds to the 20% most deprived areas and the 5 to the 20% less deprived areas (and so on). So this is more like a categorical ordered variable rather than a numeric one. You could therefore use as.factor() to create a factor version of it and use code we introduced in week 2 to rename the factor levels. I won't provide the detailed code, because you should get the gist.
+
+Remember the name of the survey? CSEW (England and *Wales*). And the name of this measure? *English* Index of Deprivation. You can guess what's next...
+
+```{r}
+sum(is.na(csew$edeprivex))
+```
+
+Right. So we have 1453 cases for which we have no valid values in this variable. This variable is an administrative variable appended to the CSEW. The data comes from the Government and is available for the whole of England. The NA here has nothing to do with refusing to answer the question or not knowing how to answer it. These 1453 cases are respondents that live in Wales and as a result we have no information on this measure. So, if you want to use this variable you need to realise your analysis will only be pertinent to England. Any inferences you make could not be generalised to Wales. As earlier, you may want to filter your data accordingly.
+
+```{r}
+csew <-filter(csew, !is.na(edeprivex))
+```
+
+One more to go...
+
+```{r}
+class(csew$age)
+table(as_factor(csew$age))
+sum(is.na(csew$age))
+```
+
+So here we have a labelled vector that is actually a quantitative variable. We have some missing data as well. 55 respondens refused to answer and 3 don't actually know their age. At least we don't have any funny stuff going on with additional NA data. Ok, since this is a quantitative variable it make sense to encode it as a numeric vector
+
+```{r}
+csew$age_n <- as.numeric(csew$age)
+table(csew$age_n)
+
+```
+
+You will notice that we no longer have a count of people thar refused or don't know their answer. Or don't we? If you oay attention you will see there are 55 people "aged" 998 and 3 "aged" 999. Those values are not really ages. Those are values that the survey designers use to denote with the labels "Refused" and "Don't Know". Obviously we don't want to treat those two values as valid values so our next step will be to recode our variable such that those two values become NA.
+
+```{r}
+csew$age_n[csew$age_n == 998 | csew$age_n == 999] <- NA
+table(csew$age_n)
+```
+
+This is an illlustration of some of the things you can and will need to do to process your data and get it ready for analysis. This is only the first real step. It is very important that you get this right and you have a good sense for what you are doing. Once you have done all of this, you are in a position to actually start looking at relationships. 
+
+For example, I could look at whether age varies across the differents levels of confidence in the police:
+
+
+Or I could look at whether victimisation is related to confidence with the police:
+
+What type of chart you use will be contingent on the nature of the variables you use. So make sure you select the correct ones.
