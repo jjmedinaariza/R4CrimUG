@@ -102,7 +102,27 @@ Notice how now we have a dataframe of 18233. Given we are using a question that 
 
 NA data is a problem in data analysis because if we have a lot of missing data in a variable it means that our inferences about what the population thinks or experience may be way off (if for example the people that did not answer are very different from those that refused or didn't know how to answer). In this case you don't need to worry about that kind of bias with this variable too much. You only have 2 + 504 people *from the relevant subsample* for which you don't know the answers. This is a smallish proportion of this subsample. But if this proportion was to be much bigger you would have a problem. 
 
-Recode into NA... and remove the labels
+when we do our analysis we won't be able to use those 506 cases for which we don't know their beliefs about confidence in the police. We know that because the labels "Refused" and "Don't Know" have a meaning to us. However, those labels don't mean the same to R. R only knows that those are two levels in the factor, but it does not know that those cases correspond to individuals for which we don't have "useful" information regarding their perceptions of the police. So we need to tell R that those cases, that those two labels correspond to NA data.
+
+We do that doing some recoding of the factor. Recoding essentially means reassining the answers we have in the variables in a different way. You should read more about it [here](http://rprogramming.net/recode-data-in-r/) and [here](http://www.cookbook-r.com/Manipulating_data/Recoding_data/).
+
+```{r}
+csew$cjspolb_f[csew$cjspolb_f == "Refused"] <- NA
+csew$cjspolb_f[csew$cjspolb_f == "Don't know"] <- NA
+table(csew$cjspolb_f)
+sum(is.na(csew$cjspolb_f))
+
+```
+
+
+R now knows that those 506 cases are NA. But the factor still is preserving the labels "Refused" and "Don't Know". Given we are no longer use them it is important you remove those labels to avoid problems later on. We can use the *droplevels()* function for this.
+
+```{r}
+csew$cjspolb_f <- droplevels(csew$cjspolb_f)
+table(csew$cjspolb_f)
+```
+
+The droplevels() function get rids of levels in the factor that are empty. So, we no longer have to worry about those.
 
 Ok, so two to go.
 
@@ -151,6 +171,19 @@ table(csew$age_n)
 This is an illlustration of some of the things you can and will need to do to process your data and get it ready for analysis. This is only the first real step. It is very important that you get this right and you have a good sense for what you are doing. Once you have done all of this, you are in a position to actually start looking at relationships. 
 
 For example, I could look at whether age varies across the differents levels of confidence in the police:
+
+```{r}
+ggplot(csew, aes(x = cjspolb_f, y=age_n)) +
+  geom_boxplot()
+```
+If you don't want the NA displayed you could subset the data with the code below:
+
+
+```{r}
+ggplot(data=subset(csew, !is.na(cjspolb_f)), aes(x = cjspolb_f, y=age_n)) +
+  geom_boxplot()
+```
+
 
 
 Or I could look at whether victimisation is related to confidence with the police:
