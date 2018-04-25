@@ -1,0 +1,90 @@
+---
+title: "Recoding for the Coursework Assignment"
+author: "Juanjo Medina"
+date: "24 April 2018"
+output: html_document
+---
+
+##Introduction
+
+```{r}
+library(dplyr)
+library(forcats)
+```
+
+
+There are many situation in the process of data analysis where you have to somehow change your existing variables or create new variables (often using information stored in existing ones) in order to achieve your analytical goals. In this session, we are going to discuss and cover some of the scenarios in which this may be required and also explain how to do this. For this practical we will use the data from the British Crime Survey. 
+
+```{r}
+##R in Windows have some problems with https addresses, that's why we need to do this first:
+urlfile<-'https://raw.githubusercontent.com/jjmedinaariza/LAWS70821/master/BCS0708.csv'
+#We create a data frame object reading the data from the remote .csv file
+BCS0708<-read.csv(url(urlfile))
+summary(BCS0708)
+```
+
+#Recoding factors: reordering and collapsing levels
+
+As we said there are many different types of objects in R and depending on their nature the recoding procedures may vary. You may remember that many times categorical variables will be encoded as factors. Let's look at ethnicity:
+
+```{r}
+table(BCS0708$ethgrp2)
+levels(BCS0708$ethgrp2)
+```
+
+You can see there are 5 levels, which are ordered alphabetically. Let's think about what recodes you may want to use here.
+
+Remember our discussions about regression analysis and categorical variables. If you were to fit a model say explaining victimisation and using this as an explanatory variable you would have 4 regression coefficients indicating how each groups differs from the reference category, which is always the first. So the regression coefficients would tell you how different the Asian group is from each of the others. IF that's what drives your interest those may be the coefficients you may want to see. But often when we use ethnicity we are interested rather in how different other groups are from the main ethnic mayority. In this case you may want, therefore, to reverse the order of the levels so that the White group becomes the reference category.
+
+We may also want to collapse the mixed with the Chinese or other into a more generic Other category. There are only 56 people in the mixed cateogory and with such a small sample size there is going to be more variability in your estimates for this group, so it may be wise to add the mixed the the Chinese or other.
+
+How do we do this? There are multiple ways. To the degree we can we will use the tidyverse approach to working with R. So to change the order of the levels we could use the recode_factor() function from dplyr in the following manner.
+
+```{r}
+BCS0708$ethgrp2_rc <- recode_factor(BCS0708$ethgrp2, '1' = "white", '2' = "asian or asian british", 
+              '3' = "black or black british", '4' = "chinese or other", 
+              '5' = "mixed")
+table(BCS0708$ethgrp2_rc)
+levels(BCS0708$ethgrp2_Rc)
+```
+
+Notice that I rather than overwriting the original variable I do create a new one. This is so that if I make a mistake in the recode I still have the original variable intact.
+
+We could also easily collapse the categories. For these the forcats package offers some convenient functions. Notice we only need to input the levels we want to collapse into one.
+
+```{r}
+
+BCS0708$ethgrp2_rc <- fct_collapse(BCS0708$ethgrp2, "Other" = c("chinese or other", "mixed"))
+levels(BCS0708$ethgrp2_rc)               
+
+```
+
+This function is the one you will need to use if you are using a categorical variable with more than 2 levels as the dependent variable for your assignment. Imagine that you are using wburgl as the dependent variable in your essay (just to avoid confusion, you cant use this dataset for your essay).
+
+```{r}
+table(BCS0708$wburgl)
+```
+
+To start with you would need to change the order of this using recode_factor so that the categories were in an appropriate order, rather than in alphabetical order, and then do your crosstabulations. But let's focus on the regression model. You could fit an ordinal regression model (but we haven't taught you how), so the option that are giving you is to fit a logistic model instead. Now, to that first you would need to dichotomise your variable, that is, you would need to collapse all categories into just two. Which two? Well, that will very much depend on your research question and the particular variable you may be working with. Here we are looking at worry of crime and because I know that even people that worry a lot about crime do not see their quality of life very affected (research tells me so) I may want to focus in those that are the most worried as my group of interest. So in this case I would have a "very worried" level and a "not very worried" level. Again, we can use fct_collapse() for doing this.
+
+```{r}
+BCS0708$wburgl_rc <- fct_collapse(BCS0708$wburgl, 
+                                  "not very worried" = c("fairly worried", "not at all worried",
+                                                         "not very worried"))
+table(BCS0708$wburgl_rc)
+```
+
+There are many other ways to recode variables and create new variables based in existing ones. For the purposes of the assignment you may have specific ideas of how you may want to combine variables or recode existing ones. You can find additional examples and code for how to do the recoding of variables in the following links:
+
+[Wrangling categorical data in R](https://peerj.com/preprints/3163.pdf)
+
+[http://rprogramming.net/recode-data-in-r/](http://rprogramming.net/recode-data-in-r/)
+
+[http://www.cookbook-r.com/Manipulating_data/Recoding_data/](http://www.cookbook-r.com/Manipulating_data/Recoding_data/)
+
+You should also look for the dplyr documentation for the functions mutate() and recode().
+
+If you would like to combine several variables into one for your analysis but do not know how to do that, please do get in touch. Also do not hesitate to approach us if you have any other specific queries.
+
+
+
