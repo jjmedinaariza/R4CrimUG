@@ -82,6 +82,10 @@ There are many other ways to recode variables and create new variables based in 
 
 [http://www.cookbook-r.com/Manipulating_data/Recoding_data/](http://www.cookbook-r.com/Manipulating_data/Recoding_data/)
 
+[https://mgimond.github.io/ES218/Week03a.html](https://mgimond.github.io/ES218/Week03a.html)
+
+[https://www.r-bloggers.com/from-continuous-to-categorical/](https://www.r-bloggers.com/from-continuous-to-categorical/)
+
 You should also look for the dplyr documentation for the functions mutate() and recode().
 
 If you would like to combine several variables into one for your analysis but do not know how to do that, please do get in touch. Also do not hesitate to approach us if you have any other specific queries.
