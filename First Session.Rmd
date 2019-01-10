@@ -1,12 +1,9 @@
 ---
-title: "A first lesson about R"
+title: "Week 1: A first lesson about R"
 output:
   tufte::tufte_html: default
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 **TABLE OF CONTENTS**
 
 - [Install R & RStudio](#install-r-&-rstudio).
@@ -530,3 +527,8 @@ If you say "yes" what will happen is that all the objects you have in your envir
 Truth is what is real is your scripts and the data that your scripts use as inputs. You don't need anything that is in your environment, because you can recreate those things by re-running your scripts. I like keeping things tidy, so when I am asked whether I want to save the image, my answer is alway no. Most long time users of R never save the workspace, nor care about saving the history either. Remember what is real is your scripts and the data.
 
 Keep in mind though that you should not then panic if you open your next RStudio session and you don't see any objects in your environment. The good news is you can generate them quickly enough (if you really need them) by re-running your scripts. I would suggest that at this point it may be helpful for you to get into this habit as well. I suspect otherwise you will be in week 9 of the semester and have an environment full of garbage you don't really need.
+
+
+```{r, echo=false}
+sessionInfo()
+```

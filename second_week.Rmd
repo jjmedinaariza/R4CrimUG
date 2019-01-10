@@ -1,5 +1,5 @@
 ---
-title: "Causality in randomised experiments"
+title: "Week 2: Causality in randomised experiments"
 output:
   tufte::tufte_html: default
 ---
@@ -360,7 +360,7 @@ Let's look at the code in the summarise function above. First we are asking R to
 So, what we see here is that about 13.6% of applicants with no criminal record received a positive response from the employers, whereas only 8% of those with criminal records did receive such a response. Given that the asignation of a criminal record was randomised to the applicants, there's a pretty good chance that no other [**confounders**](https://en.wikipedia.org/wiki/Confounding) are influencing this outcome. And that is the beauty of randomised experiments. You may be in a position to make stronger claims about your results.
 
 *HOMEWORK 1:*
-*Use what we have learned so far to see if there is an interaction effect between race and criminal records. That is, what would happen if we compare 4 groups whites with no records, whites with records, blacks with no records, and blacks with records. What do you think? Is there an interaction effect? In other words, is the impact of having a criminal record more accentuated for either of the two racial groups? Be ready ti answer these questions before you attempt the Blackboard test* 
+*Use what we have learned so far to see if there is an interaction effect between race and criminal records. That is, what would happen if we compare 4 groups whites with no records, whites with records, blacks with no records, and blacks with records. What do you think? Is there an interaction effect? In other words, is the impact of having a criminal record more accentuated for either of the two racial groups? Be ready to answer these questions before you attempt the Blackboard test* 
 
 ```{r, eval=FALSE, echo=FALSE}
 by_recrace <- group_by(aer2017, as_factor(crime), black_f)
@@ -412,3 +412,8 @@ Watch [this video](https://www.khanacademy.org/math/probability/data-distributio
 **As part of this week homework you need to let us know which survey and which topic you want to focus on for your coursework assignment**. *Think about which of these topics appeals the most to you when making your decision. Be ready to answer questions about this when starting the Blackboard test*.
 
 *You can explore the datasets and what other variables are available. For your coursework you will need to identify other variables in these surveys that you think may be associated or helpful to understand why people vary in worry of crime, attitudes toward punishment, etc. At this point you don't need to identify those other variables, but you may find it useful to explore what's available in those datasets using NESSTAR (a guide for how to use NESSTAR is available [here](http://nesstar.com/help/4.0/webview/getting-started/getting-to-know-nesstar-webview.html))and the existing documentation for those studies*
+
+
+```{r, echo=false}
+sessionInfo()
+```
